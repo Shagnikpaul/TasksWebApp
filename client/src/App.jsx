@@ -9,10 +9,10 @@ function App() {
     <>
       <p className='text-xl'>HEWO there !!  {count}</p>
       <Button onPress={() => {
-        setCount(count+1)
+        setCount(count-1)
       }}
       color='primary'
-      >Press me to increase da count !!!! 😈😈😈😈 
+      >Press me to decrease da count !!!! 😐
       </Button>
     </>
   )
