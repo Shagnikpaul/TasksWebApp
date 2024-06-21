@@ -13,6 +13,10 @@ export default {
 
   ],
   theme: {
+    fontFamily: {
+      poppins: ["Poppins", "sans-serif"],
+      sourcecode: ["Source Code Pro", "monospace"],
+    },
     extend: {},
 
   },

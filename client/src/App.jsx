@@ -1,19 +1,15 @@
-import { useState } from 'react'
-import {Button} from '@nextui-org/button'
+
 import './App.css'
+import HomePage from './pages/HomePage'
 
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
     <>
-      <p className='text-xl'>HEWO there !!  {count}</p>
-      <Button onPress={() => {
-        setCount(count-1)
-      }}
-      color='primary'
-      >Press me to decrease da count !!!! 😐
-      </Button>
+      <HomePage>
+      
+      </HomePage>
     </>
   )
 }
