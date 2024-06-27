@@ -13,13 +13,36 @@ export default {
 
   ],
   theme: {
+    colors: {
+      'olive': {
+        light: '#1E1E1E',
+        DEFAULT: '#1E1E1E',
+        dark: '#1E1E1E',
+        text: '#E0FFFD'
+      }
+    },
     fontFamily: {
       poppins: ["Poppins", "sans-serif"],
       sourcecode: ["Source Code Pro", "monospace"],
+      inter: ["Inter", "sans-serif"]
     },
     extend: {},
 
   },
   darkMode: "class",
-  plugins: [nextui()]
+  plugins: [
+    nextui({
+      themes: {
+        dark: {
+          colors: {
+            primary: {
+              DEFAULT: "#BEF264",
+              foreground: "#1E1E1E",
+            },
+            focus: "#BEF264",
+          },
+        },
+      },
+    }),
+  ],
 }
