@@ -1,15 +1,16 @@
 //import React from 'react'
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
+import Logo from '../components/Logo'
 
 function NavBarTop() {
   return (
-    <Navbar className="bg-olive">
+    <Navbar className="bg-olive" maxWidth="full">
       <NavbarBrand>
-        <p className="font-bold text-inherit">T</p>
+        <Logo size={40}></Logo>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <h1 className='font-bold text-2xl p-0 font text-olive-text'>Tasks</h1>
+          <h1 className='font-bold text-2xl p-0 font text-olive-text'>Tasks.</h1>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent as="div" justify="end">
@@ -20,10 +21,9 @@ function NavBarTop() {
               radius="lg"
               as="button"
               className="transition-transform"
-              color="secondary"
-              name="Jason Hughes"
+              name="Kanchon"
               size="md"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoZaU_o60IwNkACgp-ym8ntEBLKs9oM8Qwcg&s"
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">

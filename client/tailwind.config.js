@@ -15,10 +15,10 @@ export default {
   theme: {
     colors: {
       'olive': {
-        light: '#1E1E1E',
-        DEFAULT: '#1E1E1E',
-        dark: '#1E1E1E',
-        text: '#E0FFFD'
+        light: '#272B27',
+        DEFAULT: '#272B27',
+        dark: '#272B27',
+        text: '#E3FFDE'
       }
     },
     fontFamily: {
@@ -30,19 +30,5 @@ export default {
 
   },
   darkMode: "class",
-  plugins: [
-    nextui({
-      themes: {
-        dark: {
-          colors: {
-            primary: {
-              DEFAULT: "#BEF264",
-              foreground: "#1E1E1E",
-            },
-            focus: "#BEF264",
-          },
-        },
-      },
-    }),
-  ],
+  plugins: [nextui({addCommonColors: true,})],
 }
