@@ -3,7 +3,7 @@ import ChipGroup from '../components/homepage/ChipGroup'
 import Heading from '../components/homepage/Heading'
 import NavBarTop from '../components/NavBarTop'
 import data from '../utils/sample_data';
-import {Chip} from '../components/homepage/Chip'
+// import {Chip} from '../components/homepage/Chip'
 export default function HomePage() {
   
   return (
@@ -12,7 +12,6 @@ export default function HomePage() {
       <div className='mt-20'>
         <Heading count={9}></Heading>
         <ChipGroup topics={data}></ChipGroup>
-        <Chip content={"hello"}></Chip>
       </div>
 
     </>
