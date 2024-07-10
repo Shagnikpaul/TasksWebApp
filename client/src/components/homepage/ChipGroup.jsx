@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 export default function ChipGroup({ topics }) {
     const t = topics.map(tp =>
         <Chip
-            key={tp}
+            key={tp.topic_name}
             startContent={<p>{tp.emoji}</p>}
             variant="flat"
             size="lg"
+            color="success"
             radius='sm'
             
         >{tp.topic_name}</Chip>

@@ -10,7 +10,7 @@ function NavBarTop() {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <h1 className='font-bold text-2xl p-0 font text-olive-text'>Tasks.</h1>
+          <h1 className='font-bold text-2xl p-0 text-olive-text'>Tasks.</h1>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent as="div" justify="end">
