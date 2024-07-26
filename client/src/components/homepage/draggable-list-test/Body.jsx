@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from "react-dom";
 import TaskList from './Task-list';
 import TodoForm from './todo-form';
-
+import { useState } from 'react';
 
 const Body = () => {
     const [taks, setTasks] = useState([]);
@@ -14,13 +14,13 @@ const Body = () => {
     }
 
     const handleRemoveTask = index => {
-        const newTasks = [...tasks];
+        const newTasks = [...taks];
         newTasks.splice(index, 1);
         setTasks(newTasks);
     };
 
     const handleCompleteTask = index => {
-        const newTasks = [...tasks];
+        const newTasks = [...taks];
         newTasks[index].complete = !newTasks[index].complete;
         setTasks(newTasks);
     };
@@ -33,7 +33,7 @@ const Body = () => {
                 handleAddTask={handleAddTask}
             />
             <TaskList
-                tasks={tasks}
+                tasks={taks}
                 setTasks={setTasks}
                 handleRemoveTask={handleRemoveTask}
                 handleCompleteTask={handleCompleteTask}
