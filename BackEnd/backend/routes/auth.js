@@ -28,7 +28,7 @@ router.post("/signin", async(req,res) => {
                 res.status(400).json({message:"Password is not correct"});
             }else{
                 const{password,...others}= user._doc;
-                res.status(200).json({others});
+                res.status(200).json({others,message:"Sign in successful"});
             }
         }
     }catch(error){

@@ -3,13 +3,11 @@ import { Input, Button } from "@nextui-org/react";
 import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "../components/signinpage/passicon";
 import { Link } from "wouter";
+
 function RegisterPage() {
 
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
-
-
-
 
     const registerAction = function () {
         console.log("Clicked on register Button !!");
@@ -27,8 +25,7 @@ function RegisterPage() {
                                 aria-label="toggle password visibility"
                                 className="focus:outline-none"
                                 type="button"
-                                onClick={toggleVisibility}
-                            >
+                                onClick={toggleVisibility}>
                                 {isVisible ? (
                                     <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
                                 ) : (

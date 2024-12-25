@@ -17,9 +17,7 @@ export default function HomePage() {
       <div className='mt-20'>
         <Heading count={9}></Heading>
         <ChipGroup topics={data}></ChipGroup>
-        
       </div>
-
     </>
   )
 }

@@ -12,7 +12,6 @@ function App() {
     <>
 
       <Route path="/home" component={HomePage}>
-
       </Route>
 
       <Route path="/" component={SignIn}>
