@@ -8,13 +8,13 @@ const { default: conn } = require("./connection/connection");
 
 app.use(express.json()); // define the format of data exchange
 
-app.use("/api/v1",auth);
-app.use("/api/v2",crud);
+app.use("/api/v1", auth);
+app.use("/api/v2", crud);
 
 // app.get("/" , (req,res) => {
 //     res.send("Hello");
 // })
 
-app.listen(8000,()=>{
+app.listen(1000, () => {
     console.log("Server started");
 });
