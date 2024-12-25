@@ -1,18 +1,17 @@
 const mongoose = require("mongoose")
 const dotenv = require('dotenv');
-const conn = async (req, res) => {
+const conn = async () => {
     try {
-        dotenv.config()
+        dotenv.config({ path: '../.env' })
         console.log("mongo connection string : ", process.env.mongo);
         await mongoose.connect(process.env.mongo).then(() => {
             // console.log("Connected")
-            res.status(200).json({"message":"Connected"});
+            console.log('Mongo Connection successful');
+
         })
     } catch (error) {
-        res.status(400).json({
-            message: "Not Connected"
-        });
 
+        console.log('Mongo Connection failed and reason : ', error);
 
     }
 

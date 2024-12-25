@@ -3,6 +3,7 @@ const app = express();
 require("./connection/connection");
 const auth = require("./routes/auth"); //Authentication check
 const crud = require("./routes/list");// CRUD operations
+const { default: conn } = require("./connection/connection");
 // require("./models/list");
 
 app.use(express.json()); // define the format of data exchange
