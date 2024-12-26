@@ -3,26 +3,32 @@ import { Input, Button } from "@nextui-org/react";
 import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "../components/signinpage/passicon";
 import { Link } from "wouter";
+import axios from 'axios';
 function SignIn() {
 
     const [isVisible, setIsVisible] = useState(false);
-    const [inputs, setInputs] = useState({ password:"", email:"" });
+    const [inputs, setInputs] = useState({ password: "", email: "" });
     const toggleVisibility = () => setIsVisible(!isVisible);
 
     const change = (e) => {
+        //console.log("e.target is ", e.target)
         setInputs({ ...inputs, [e.target.name]: e.target.value });
-        console.log(e.target.name)//name is undefined 
+        //console.log(e.target.value)//name is undefined 
         // console.log(e.target.value)
     }
 
     const signInClick = async (e) => {
         e.preventDefault();
+        console.log("Inputs Object : ", inputs);
+
         await axios.post("http://localhost:1000/api/v1/signin", inputs).then((response) => {
             console.log(response);
             setInputs({
                 email: "",
                 password: ""
             });
+        }).catch((r) => {
+            console.log('Sign In Error reason :', r.message);
         });
     };
 
@@ -42,10 +48,10 @@ function SignIn() {
                     <Input
                         isRequired label="Email" className="min-w-96" placeholder="Enter your email" size="lg" variant="faded"
                         type="email"
-                        isClearable  
+                        isClearable
                         value={inputs.email}
                         name="email"
-                        onValueChange={change}
+                        onChange={change}
                     />
                     <Input
                         endContent={
