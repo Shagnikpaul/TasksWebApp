@@ -4,11 +4,18 @@ import { useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "../components/signinpage/passicon";
 import { Link } from "wouter";
 import axios from 'axios';
+import { replace, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../store";
+
 function SignIn() {
 
     const [isVisible, setIsVisible] = useState(false);
     const [inputs, setInputs] = useState({ password: "", email: "" });
     const toggleVisibility = () => setIsVisible(!isVisible);
+    const nav=useNavigate();
+
+    const dispatch = useDispatch();
 
     const change = (e) => {
         //console.log("e.target is ", e.target)
@@ -20,15 +27,18 @@ function SignIn() {
     const signInClick = async (e) => {
         e.preventDefault();
         console.log("Inputs Object : ", inputs);
-
         await axios.post("http://localhost:1000/api/v1/signin", inputs).then((response) => {
-            console.log(response);
+            // console.log(response);
             setInputs({
                 email: "",
                 password: ""
             });
+            sessionStorage.setItem("id",response.data.others._id);
+            dispatch(authActions.login());
+            nav("/home");
         }).catch((r) => {
             console.log('Sign In Error reason :', r.message);
+            alert("Incorrect password or email");
         });
     };
 
@@ -37,9 +47,9 @@ function SignIn() {
 
     // }
 
-    const registerAction = function () {
-        console.log("Clicked on register Button !!");
-    }
+    // const registerAction = function () {
+    //     console.log("Clicked on register Button !!");
+    // }
 
     return (
         <div className="main flex flex-row justify-center">
@@ -83,8 +93,11 @@ function SignIn() {
                         </Link> */}
                         <Button className="bg-green-400" onClick={signInClick}>Sign In</Button>
 
-                        <Link href='/register'>
+                        {/* <Link href='/register'>
                             <Button color="secondary" onClick={registerAction}>Register</Button>
+                        </Link> */}
+                        <Link href='/register'>
+                            <Button color="secondary">Register</Button>
                         </Link>
                     </div>
                 </div>

@@ -25,6 +25,7 @@ router.post("/signin", async(req,res) => {
         }else{
             const isCorrectPassword = bcrypt.compareSync(req.body.password,user.password);
             if(!isCorrectPassword){
+                // res.status(400).json({message:"Password is not correct"});
                 res.status(400).json({message:"Password is not correct"});
             }else{
                 const{password,...others}= user._doc;

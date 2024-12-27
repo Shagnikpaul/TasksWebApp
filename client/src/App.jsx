@@ -5,8 +5,19 @@ import RegisterPage from './pages/RegisterPage';
 import SignIn from './pages/SignIn'
 
 import { Route } from "wouter";
+import { useDispatch } from 'react-redux';
+import { authActions } from './store';
+import { useEffect } from 'react';
+
 function App() {
 
+  const dispatch = useDispatch(); //show logout and dp when user id is there in session storage
+  useEffect(() => {
+    const id = sessionStorage.getItem("id");
+    if(id){
+      dispatch(authActions.login());
+    }
+  },[]);
 
   return (
     <>

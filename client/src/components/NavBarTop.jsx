@@ -1,8 +1,23 @@
 //import React from 'react'
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@nextui-org/react";
 import Logo from '../components/Logo'
+import {useSelector} from "react-redux";
+
+import { useDispatch } from "react-redux";
+import { authActions } from "../store";
+import { replace, useNavigate } from "react-router-dom";
 
 function NavBarTop() {
+  const nav=useNavigate();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  
+  const logoutClick = async (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem("id");
+    dispatch(authActions.logout());
+    nav(-1);
+};
   return (
     <Navbar className="bg-olive" maxWidth="full">
       <NavbarBrand>
@@ -13,7 +28,7 @@ function NavBarTop() {
           <h1 className='font-bold text-2xl p-0 text-olive-text'>Tasks.</h1>
         </NavbarItem>
       </NavbarContent>
-      <NavbarContent as="div" justify="end">
+      {isLoggedIn && (<NavbarContent as="div" justify="end">
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
@@ -33,12 +48,13 @@ function NavBarTop() {
             </DropdownItem>
             <DropdownItem key="settings">Settings</DropdownItem>
 
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem key="logout" color="danger"
+            onClick={logoutClick}>
               Log Out
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-      </NavbarContent>
+      </NavbarContent>)}
     </Navbar>
   );
 }

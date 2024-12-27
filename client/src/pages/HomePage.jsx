@@ -5,12 +5,15 @@ import Heading from '../components/homepage/Heading'
 import NavBarTop from '../components/NavBarTop'
 import data from '../utils/sample_data';
 
+import {useSelector} from "react-redux";
+
 
 // import {Chip} from '../components/homepage/Chip'
 
 
 export default function HomePage() {
-
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  console.log(isLoggedIn);
   return (
     <>
       <NavBarTop></NavBarTop>

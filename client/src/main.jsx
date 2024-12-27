@@ -2,15 +2,22 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import {NextUIProvider} from '@nextui-org/react'
-
+import { NextUIProvider } from '@nextui-org/react'
+import { store } from "./store";
+import { Provider } from "react-redux";
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
+
   <React.StrictMode>
-    <NextUIProvider>
-    <main className="dark text-foreground">
-        <App />
-    </main>
-    </NextUIProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <NextUIProvider>
+          <main className="dark text-foreground">
+            <App />
+          </main>
+        </NextUIProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
 )
