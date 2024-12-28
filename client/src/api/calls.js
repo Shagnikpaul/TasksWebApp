@@ -1,4 +1,4 @@
-import  axios  from "axios"
+import axios from "axios"
 
 // user email,id in user object, task Title body in task object
 export async function addTask(user, task) {
@@ -112,40 +112,53 @@ export async function getDoneTasks(user, task) {
     }
 }
 
-export function getTasks(user, task) {
+const j = {
+    list: [
+        {
+            _id: '676f944896993451fab29e20',
+            title: 'throw in valo',
+            body: 'do it by 12pm',
+            priotity: 0,
+            color: 'gray',
+            isCompleted: false,
+            user: [Array],
+            __v: 0
+        },
+        {
+            _id: '676f99694f04c91c377af5b1',
+            title: 'throw in valo part 2',
+            body: 'do it by 12pm epic fail',
+            priotity: 0,
+            color: 'gray',
+            isCompleted: false,
+            user: [Array],
+            __v: 0
+        }
+    ]
+}
+
+
+export async function getTasks(user, task) {
 
     try {
-          axios.get(`http://localhost:1000/api/v2/getTasks/${user.id}`)
+        return await axios.get(`http://localhost:1000/api/v2/getTasks/${user.id}`)
             .then((response) => {
                 let result = response.data;
                 // console.log(response)
                 // console.log("here2")
                 console.log(result)
-                return result;
+                return j;
             })
             .catch((error) => {
-                return error;
+                return j;
             })
-            
+
     }
     catch (error) {
-        return error;
+        return j;
     }
 }
 console.log("here")
-<<<<<<< HEAD
-console.log(getTasks({id:"676ba43b33d90cdb2e0b78c8"},null))
-// axios.get(`http://localhost:1000/api/v2/getTasks/676ba43b33d90c/db2e0b78c8`)
-//             .then((response) => {
-//                 const result = response.data;
-//                 console.log(result)
-//                 // return result
-//             })
-//             .catch((error) => {
-//                 // return error;
-//                 console.log(error)
-//             })
-=======
-const hello = await getTasks({id:"676ba43b33d90cdb2e0b78c8"},null)
+const hello = await getTasks({ id: "676ba43b33d90cdb2e0b78c8" }, null)
+
 console.log(hello);
->>>>>>> 310cecfad7caa0fb580072836bc3e2da15688544
