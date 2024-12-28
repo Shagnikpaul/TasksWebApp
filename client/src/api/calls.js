@@ -2,8 +2,6 @@ import axios from "axios"
 
 // user email,id in user object, task Title body in task object
 export async function addTask(user, task) {
-    const endpoint = "localhost:1000/api/v2/addTask/".concat(user.id);
-
     const payload = {
         email: user.email,
         title: task.title,
@@ -12,7 +10,7 @@ export async function addTask(user, task) {
         color: task.color
     }
     try {
-        const response = await axios.post(endpoint, payload)
+        return await axios.post(`http://localhost:1000/api/v2/getTasks/${user.id}`, payload)
             .then((response) => {
                 const result = response.data;
                 return result
@@ -26,15 +24,13 @@ export async function addTask(user, task) {
 }
 //requires old task id, email id of user, new task title and body
 export async function updateTask(user, task) {
-    const endpoint = "localhost:1000/api/v2/updateTask".concat(task.id);
-
     const payload = {
         email: user.email,
         title: task.title,
         body: task.body
     }
     try {
-        const response = await axios.put(endpoint, payload)
+        return await axios.put(`http://localhost:1000/api/v2/getTasks/${task.id}`, payload)
             .then((response) => {
                 const result = response.data;
                 return result
@@ -50,13 +46,11 @@ export async function updateTask(user, task) {
 
 //requires task id and user email
 export async function completeTask(user, task) {
-    const endpoint = "localhost:1000/api/v2/completeTask".concat(task.id);
-
     const payload = {
         email: user.email,
     }
     try {
-        const response = await axios.put(endpoint, payload)
+        return await axios.put(`http://localhost:1000/api/v2/completeTask/${task.id}`, payload)
             .then((response) => {
                 const result = response.data;
                 return result
@@ -73,13 +67,11 @@ export async function completeTask(user, task) {
 //requires user email and task id
 
 export async function deleteTask(user, task) {
-    const endpoint = "localhost:1000/api/v2/deleteTask".concat(task.id);
-
     const payload = {
         email: user.email,
     }
     try {
-        const response = await axios.delete(endpoint, payload)
+        return await axios.delete(`http://localhost:1000/api/v2/deleteTask/${task.id}`, payload)
             .then((response) => {
                 const result = response.data;
                 return result
@@ -93,12 +85,11 @@ export async function deleteTask(user, task) {
     }
 }
 
-//requires user id id
+//requires user id
 export async function getDoneTasks(user, task) {
-    const endpoint = "localhost:1000/api/v2/getDoneTasks".concat(user.id);
 
     try {
-        const response = await axios.get(endpoint)
+        return await axios.get(`http://localhost:1000/api/v2/getTasks/${user.id}`)
             .then((response) => {
                 const result = response.data;
                 return result
@@ -111,32 +102,6 @@ export async function getDoneTasks(user, task) {
         return error;
     }
 }
-
-const j = {
-    list: [
-        {
-            _id: '676f944896993451fab29e20',
-            title: 'throw in valo',
-            body: 'do it by 12pm',
-            priotity: 0,
-            color: 'gray',
-            isCompleted: false,
-            user: [Array],
-            __v: 0
-        },
-        {
-            _id: '676f99694f04c91c377af5b1',
-            title: 'throw in valo part 2',
-            body: 'do it by 12pm epic fail',
-            priotity: 0,
-            color: 'gray',
-            isCompleted: false,
-            user: [Array],
-            __v: 0
-        }
-    ]
-}
-
 
 export async function getTasks(user, task) {
 
@@ -144,10 +109,8 @@ export async function getTasks(user, task) {
         return await axios.get(`http://localhost:1000/api/v2/getTasks/${user.id}`)
             .then((response) => {
                 let result = response.data;
-                // console.log(response)
-                // console.log("here2")
-                console.log(result)
-                return j;
+                // console.log(result)
+                return result;
             })
             .catch((error) => {
                 return j;
@@ -158,7 +121,7 @@ export async function getTasks(user, task) {
         return j;
     }
 }
-console.log("here")
-const hello = await getTasks({ id: "676ba43b33d90cdb2e0b78c8" }, null)
+// console.log("here")
+// const hello = await getTasks({ id: "676ba43b33d90cdb2e0b78c8" }, null)
 
-console.log(hello);
+// console.log(hello);
