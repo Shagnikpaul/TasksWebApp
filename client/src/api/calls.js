@@ -113,14 +113,15 @@ export async function getDoneTasks(user, task) {
 }
 
 export function getTasks(user, task) {
-    // const endpoint = "localhost:1000/api/v2/getTasks";
 
     try {
-          axios.get(`http://localhost:1000/api/v2/getTasks/676ba43b33d90cdb2e0b78c8`)
+          axios.get(`http://localhost:1000/api/v2/getTasks/${user.id}`)
             .then((response) => {
                 let result = response.data;
+                // console.log(response)
+                // console.log("here2")
                 console.log(result)
-                return result
+                return result;
             })
             .catch((error) => {
                 return error;
@@ -132,6 +133,7 @@ export function getTasks(user, task) {
     }
 }
 console.log("here")
+<<<<<<< HEAD
 console.log(getTasks({id:"676ba43b33d90cdb2e0b78c8"},null))
 // axios.get(`http://localhost:1000/api/v2/getTasks/676ba43b33d90c/db2e0b78c8`)
 //             .then((response) => {
@@ -143,3 +145,7 @@ console.log(getTasks({id:"676ba43b33d90cdb2e0b78c8"},null))
 //                 // return error;
 //                 console.log(error)
 //             })
+=======
+const hello = await getTasks({id:"676ba43b33d90cdb2e0b78c8"},null)
+console.log(hello);
+>>>>>>> 310cecfad7caa0fb580072836bc3e2da15688544
