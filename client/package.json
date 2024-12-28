@@ -19,6 +19,7 @@
     "@nextui-org/theme": "^2.2.6",
     "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
     "font-awesome": "^4.7.0",
     "framer-motion": "^11.2.11",
     "react": "^18.2.0",

@@ -17,6 +17,6 @@ app.use("/api/v2", crud);
 //     res.send("Hello");
 // })
 
-app.listen(1000, () => {
+app.listen(8000, () => {
     console.log("Server started");
 });
