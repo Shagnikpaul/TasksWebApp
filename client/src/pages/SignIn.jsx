@@ -7,6 +7,7 @@ import axios from 'axios';
 import { replace, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store";
+import "../api/calls"
 
 function SignIn() {
 
@@ -102,8 +103,7 @@ function SignIn() {
                     </div>
                 </div>
             </div>
-        </div>
-
+        </div>  
 
     )
 }

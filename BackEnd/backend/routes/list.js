@@ -3,11 +3,11 @@ const router = require("express").Router();
 const User = require("../models/user");
 const List = require("../models/list");
 
-//CREATE task
-router.post("/addTask" , async(req,res) => {
+//CREATE task using id of user and rest of data
+router.post("/addTask/:id" , async(req,res) => {
     try {
         const {title,body,email,priority,color} = req.body;
-        const existingUser = await User.findOne({email});
+        const existingUser = await User.findOne({_id:req.params.id,email:email});
         if(existingUser){
             var priority2,color2;
             

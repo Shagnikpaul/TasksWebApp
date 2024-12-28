@@ -21,7 +21,7 @@ function RegisterPage() {
             setInputs({
                 email: "",
                 password: "",
-                username:""
+                usernamef:""
             });
             nav(-1);
         }).catch((r) => {
