@@ -5,6 +5,7 @@ import { EyeFilledIcon, EyeSlashFilledIcon } from "../components/signinpage/pass
 import { Link } from "wouter";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+const d_uri = "http://localhost:8000"
 
 function RegisterPage() {
     const nav= useNavigate();
@@ -16,7 +17,7 @@ function RegisterPage() {
         // console.log("Clicked on register Button !!");
         e.preventDefault();
         console.log("Inputs Object : ", inputs);
-        await axios.post("http://localhost:1000/api/v1/register", inputs).then((response) => {
+        await axios.post(`${d_uri}/api/v1/register`, inputs).then((response) => {
             console.log(response);
             setInputs({
                 email: "",

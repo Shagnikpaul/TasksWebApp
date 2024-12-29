@@ -8,6 +8,10 @@ import { replace, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store";
 import "../api/calls"
+const d_uri = "http://localhost:8000"
+// import env from "react-dotenv"
+// const d_uri = env.d_uri
+// console.log("d_uri",d_uri)
 
 function SignIn() {
 
@@ -19,22 +23,21 @@ function SignIn() {
     const dispatch = useDispatch();
 
     const change = (e) => {
-        //console.log("e.target is ", e.target)
         setInputs({ ...inputs, [e.target.name]: e.target.value });
-        //console.log(e.target.value)//name is undefined 
-        // console.log(e.target.value)
     }
 
     const signInClick = async (e) => {
         e.preventDefault();
         console.log("Inputs Object : ", inputs);
-        await axios.post("http://localhost:1000/api/v1/signin", inputs).then((response) => {
-            // console.log(response);
+        await axios.post(`${d_uri}/api/v1/signin`, inputs).then((response) => {
             setInputs({
                 email: "",
                 password: ""
             });
+            
             sessionStorage.setItem("id",response.data.others._id);
+            sessionStorage.setItem("email",response.data.others.email);
+            
             dispatch(authActions.login());
             nav("/home");
         }).catch((r) => {
@@ -42,15 +45,6 @@ function SignIn() {
             alert("Incorrect password or email");
         });
     };
-
-    // const signInAction = function () {
-    //     console.log("Clicked on Sign In Button !!");
-
-    // }
-
-    // const registerAction = function () {
-    //     console.log("Clicked on register Button !!");
-    // }
 
     return (
         <div className="main flex flex-row justify-center">

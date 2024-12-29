@@ -15,6 +15,7 @@ function NavBarTop() {
   const logoutClick = async (e) => {
     e.preventDefault();
     sessionStorage.removeItem("id");
+    sessionStorage.removeItem("email");
     dispatch(authActions.logout());
     nav(-1);
 };

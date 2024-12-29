@@ -12,8 +12,8 @@ import {useSelector} from "react-redux";
 
 
 export default function HomePage() {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn);
-  console.log(isLoggedIn);
+  // const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  // console.log(isLoggedIn);
   return (
     <>
       <NavBarTop></NavBarTop>
