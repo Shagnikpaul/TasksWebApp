@@ -9,15 +9,15 @@ import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <NextUIProvider>
-          <main className="dark text-foreground">
-            <App />
-          </main>
-        </NextUIProvider>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
+
+  <Provider store={store}>
+    <BrowserRouter>
+      <NextUIProvider>
+        <main className="dark text-foreground">
+          <App />
+        </main>
+      </NextUIProvider>
+    </BrowserRouter>
+  </Provider>
+  ,
 )

@@ -1,0 +1,8 @@
+:root {
+    --color-primary: #bf92f8c5;
+}
+
+
+.solid-shadow {
+    box-shadow: 6px 6px var(--color-primary);
+}
