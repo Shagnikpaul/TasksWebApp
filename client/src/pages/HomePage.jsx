@@ -34,18 +34,28 @@ export default function HomePage() {
 
 
 
+/**
+ * 
+ * Now we need to add Tasks group to categorize the tasks like pending tasks and completed tasks for now ....
+ * 
+ * also need to add radio button functionality to change the completed status of the task but first its better to 
+ * make the tasks group...
+ * 
+ * 
+ */
+
 
   return (
     <>
       <NavBarTop></NavBarTop>
       <div className='mt-20'>
-        <Heading count={9}></Heading>
+        <Heading count={userTasks.length}></Heading>
         <ChipGroup topics={data}></ChipGroup>
 
         <div className="mt-10 task-group flex justify-center">
           <div className="task-group-box flex flex-col gap-5 ">
 
-            {(userTasks.length === 0) ? "task list is empty" : userTasks.map(v => (<TaskBox key={v['_id']}></TaskBox>))}
+            {(userTasks.length === 0) ? "task list is empty" : userTasks.map(v => (<TaskBox taskData={v} key={v['_id']} ></TaskBox>))}
 
             {/* <TaskBox></TaskBox>
             <TaskBox></TaskBox>

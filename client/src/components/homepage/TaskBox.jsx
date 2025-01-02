@@ -2,26 +2,26 @@ import React, { useEffect, useState } from 'react'
 import { Checkbox } from "@nextui-org/checkbox";
 import './taskbox.css'
 
-function TaskBox({ title, body, userColor, isCompleted, _id }) {
+function TaskBox({ taskData }) {
     const [color, changeColor] = useState("gray")
     useEffect(() => {
-        console.log('usercolor : ', userColor, 'and color : ', color);
+        // console.log('Tasks details - ', 'title', taskData.title, 'body', taskData.body);
 
-        if (userColor !== undefined) {
-            changeColor(userColor)
+        if (taskData.color !== undefined) {
+            changeColor(taskData.color)
         }
     }, [])
     return (
-        <div className='max-w-3xl '>
-            <div className={`box inline-flex flex-col border-2 border-${color}-700  p-3 rounded-lg solid-shadow`}>
+        <div className='min-w-[900px]'>
+            <div className={`flex flex-col border-2 border-${color}-700 p-3 rounded-lg solid-shadow`}>
                 <Checkbox size="md" radius='full' color='secondary'>
-                    <p className='text-xl font-bold'>Task Title</p>
-                    <p className="description-body font-medium">Some description o Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis mollitia rem re. f the task. Lorem ipsum dolor sit, amet consectetur aerum.</p>
+                    <p className='text-xl font-bold'>{taskData.title}</p>
+                    <p className="description-body font-medium">{taskData.body}</p>
                 </Checkbox>
 
             </div>
         </div>
-        
+
     )
 }
 
