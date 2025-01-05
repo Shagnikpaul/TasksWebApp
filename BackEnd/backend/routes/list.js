@@ -108,5 +108,21 @@ router.get("/getDoneTasks/:id" , async(req,res) => {
     }
 });
 
+//undo task
+router.put("/undoTask/:id" , async(req,res) => {
+    try {
+        const {title,email} = req.body;
+        const existingUser = await User.findOne(
+            { email }
+        );
+        if(existingUser){
+            await List.findByIdAndUpdate(req.params.id,{isCompleted:false})
+            .then(() => res.status(200).json({message:"Task Undone"}));
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 
 module.exports = router;

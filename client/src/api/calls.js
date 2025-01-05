@@ -70,9 +70,25 @@ export async function completeTask(user, task) {
     }
 }
 
-
-
-
+//requires task id and user email
+export async function undoTask(user, task) {
+    const payload = {
+        email: user.email,
+    }
+    try {
+        return await axios.put(`${d_uri}/api/v2/undoTask/${task.id}`, payload)
+            .then((response) => {
+                const result = response.data;
+                return result
+            })
+            .catch((error) => {
+                return error;
+            })
+    }
+    catch (error) {
+        return error;
+    }
+}
 
 
 //requires user email and task id
