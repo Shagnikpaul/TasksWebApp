@@ -86,7 +86,7 @@ router.get("/getTasks/:id" , async(req,res) => {
     try {
         const list= await ( List.find({user:req.params.id}).sort({priority:-1}));
         if(list.length!=0)
-            res.status(200).json({list});
+            res.status(200).json({list, "message":"tasks"});
         else
             res.status(200).json({"message":"no tasks"});
         //use .sort({createdAt: -1}) opposite to created At id use priority number

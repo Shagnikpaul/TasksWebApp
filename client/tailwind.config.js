@@ -29,6 +29,11 @@ export default {
     extend: {},
 
   },
+  variants: {
+    extend: {
+        display: ["group-hover"],
+    },
+  },
   darkMode: "class",
   plugins: [nextui({addCommonColors: true,})],
 }

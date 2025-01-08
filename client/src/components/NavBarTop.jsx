@@ -43,14 +43,14 @@ function NavBarTop() {
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
+            <DropdownItem key="profile" className="h-14 gap-2 font-inter">
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">Kanchon Sen Gupta</p>
             </DropdownItem>
-            <DropdownItem key="settings">Settings</DropdownItem>
+            <DropdownItem key="settings" className="font-inter">Settings</DropdownItem>
 
             <DropdownItem key="logout" color="danger"
-            onClick={logoutClick}>
+            onClick={logoutClick} className="font-inter">
               Log Out
             </DropdownItem>
           </DropdownMenu>

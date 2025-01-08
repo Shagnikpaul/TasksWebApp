@@ -7,8 +7,9 @@ import NavBarTop from '../components/NavBarTop'
 import data from '../utils/sample_data';
 
 import { useSelector } from "react-redux";
-import { getTasks, getDoneTasks, completeTask, updateTask } from '../api/calls';
+import { getTasks, getDoneTasks, completeTask, undoTask } from '../api/calls';
 import TaskGroup from '../components/homepage/TaskGroup';
+import NewTaskModal from '../components/homepage/NewTaskModal';
 
 
 // import {Chip} from '../components/homepage/Chip'
@@ -42,28 +43,45 @@ export default function HomePage() {
 
 
     getTasks({ id: userId }, null).then((r) => {
+      
+      console.log("r is ",r);
+      
+      if (r['message'] === 'tasks') {
+        setUserTasks(r['list'])
+        console.log('user tasks', r['list']);
+        setPendingTasks(
+          r['list'].filter(o1 => !o1.isCompleted)
 
-      setUserTasks(r['list'])
-      console.log('user tasks', r['list']);
-      setPendingTasks(
-        r['list'].filter(o1 => !o1.isCompleted)
-
-      )
-      console.log('pending ', r['list'].filter(o1 => !o1.isCompleted));
-
+        )
+        console.log('pending ', r['list'].filter(o1 => !o1.isCompleted));
+        getDoneTasks({ id: userId }).then((r) => {
+          setCompletedTasks(r['list'])
+          console.log('completed tasks ', r['list']);
+    
+        })
+      }
+      else {
+        setUserTasks([])
+        setCompletedTasks([])
+        setPendingTasks([])
+      }
     })
 
-    getDoneTasks({ id: userId }).then((r) => {
-      setCompletedTasks(r['list'])
-      console.log('completed tasks ', r['list']);
-
-    })
+    
   }
 
   const completeATask = function (taskId, isCompleted) {
 
     if (isCompleted) {
-      console.log("UNDO function where ??? !!! 😡😡😡😡😡😡🤯🤯🤯🤯🤯🤯");
+      const userId = sessionStorage.getItem("id");
+      const userEmail = sessionStorage.getItem("email")
+
+      console.log(`running undo on ${taskId}`);
+      undoTask({ email: userEmail }, { id: taskId }).then((r) => {
+        console.log("Success undo status : ", r);
+        updateTaskData(userId, userEmail)
+
+      })
 
     }
     else {
@@ -95,9 +113,13 @@ export default function HomePage() {
         <Heading count={pendingTasks.length}></Heading>
         <ChipGroup topics={data}></ChipGroup>
 
-        <TaskGroup category='Pending Tasks' taskList={pendingTasks} updateFunction={completeATask}></TaskGroup>
+        <TaskGroup category='Pending Tasks' taskList={pendingTasks} updateFunction={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
 
-        <TaskGroup category='Completed Tasks' taskList={completedTasks} updateFunction={completeATask}></TaskGroup>
+        <TaskGroup category='Completed Tasks' taskList={completedTasks} updateFunction={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
+
+        <div className="buttonlow flex justify-center py-20">
+          <NewTaskModal updateFunction={updateTaskData} userId={sessionStorage.getItem("id")} userEmail={sessionStorage.getItem("email")}></NewTaskModal>
+        </div>
 
 
 
