@@ -37,6 +37,7 @@ function SignIn() {
             
             sessionStorage.setItem("id",response.data.others._id);
             sessionStorage.setItem("email",response.data.others.email);
+            sessionStorage.setItem("u_name",response.data.others.username);
             
             dispatch(authActions.login());
             nav("/home");

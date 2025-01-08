@@ -8,14 +8,22 @@ import { authActions } from "../store";
 import { replace, useNavigate } from "react-router-dom";
 
 function NavBarTop() {
+  
   const nav=useNavigate();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   
+  var uname="Kanchon Sen Gupta"
+  if(isLoggedIn) uname = sessionStorage.getItem("u_name");
+  console.log(uname)
+
   const logoutClick = async (e) => {
     e.preventDefault();
+    
     sessionStorage.removeItem("id");
     sessionStorage.removeItem("email");
+    sessionStorage.removeItem("u_name");
+    
     dispatch(authActions.logout());
     nav(-1);
 };
@@ -45,7 +53,7 @@ function NavBarTop() {
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2 font-inter">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">Kanchon Sen Gupta</p>
+              <p className="font-semibold">{uname}</p>
             </DropdownItem>
             <DropdownItem key="settings" className="font-inter">Settings</DropdownItem>
 
