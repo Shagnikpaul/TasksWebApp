@@ -50,10 +50,15 @@ export default function HomePage() {
         setUserTasks(r['list'])
         console.log('user tasks', r['list']);
         setPendingTasks(
-          r['list'].filter(o1 => !o1.isCompleted)
-
+          r['list'].filter(o1 => !o1.isCompleted).sort((a,b)=>
+            {
+              return a.priority-b.priority
+            })
         )
-        console.log('pending ', r['list'].filter(o1 => !o1.isCompleted));
+        console.log('pending ', r['list'].filter(o1 => !o1.isCompleted).sort((a,b)=>
+          {
+            return a.priority-b.priority
+          }));
         getDoneTasks({ id: userId }).then((r) => {
           setCompletedTasks(r['list'])
           console.log('completed tasks ', r['list']);

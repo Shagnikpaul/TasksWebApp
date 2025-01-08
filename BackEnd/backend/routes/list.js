@@ -17,7 +17,7 @@ router.post("/addTask/:id" , async(req,res) => {
             if(!color) color2='gray';
             else color2 = color;
             
-            const list= new List({title,body, user:existingUser, priotity:priority2,color:color2});
+            const list= new List({title,body, user:existingUser, priority:priority2, color:color2});
             await list.save().then(() => {
                 res.status(200).json({list});
                 existingUser.List.push(list);

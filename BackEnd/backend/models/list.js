@@ -8,7 +8,7 @@ const listSchema = new mongoose.Schema({
         type : String,
         required: true,
     },
-    priotity:{
+    priority:{
         type : Number,
         required: false,
         default : 0

@@ -15,7 +15,7 @@ function NavBarTop() {
   
   var uname="Kanchon Sen Gupta"
   if(isLoggedIn) uname = sessionStorage.getItem("u_name");
-  console.log(uname)
+  // console.log(uname)
 
   const logoutClick = async (e) => {
     e.preventDefault();
