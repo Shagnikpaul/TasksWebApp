@@ -10,7 +10,7 @@ import {
     useDisclosure,
     Input,
 } from "@nextui-org/react";
-
+import { Alert } from "@nextui-org/alert";
 import {
     Dropdown,
     DropdownTrigger,
@@ -20,6 +20,7 @@ import {
 } from "@nextui-org/dropdown";
 
 import { addTask } from '../../api/calls';
+import { IconDelete } from '../icons/DeleteIcon';
 
 export default function NewTaskModal({ updateFunction, userId, userEmail }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -43,8 +44,9 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
         console.log(`Task Title : ${taskTitle} Task Description : ${taskDescription} Task Priority :${taskPriority}`);
         addTask({ email: userEmail, id: userId }, { title: taskTitle, body: taskDescription, priority: taskPriority, color: taskColor }).then((r) => {
             console.log("Added a task with response : ", r);
-            onOpenChange()
+            
             updateFunction(userId, userEmail)
+            onOpenChange()
         })
 
     }
@@ -75,25 +77,20 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
                                     type='text'
                                     // isInvalid={(taskTitle === "" ? true : false)}
                                     // errorMessage={"Task title cannot be empty !!"}
-                                    validate={(value) => {
-                                        if (value.length === 0) {
-                                            return "Task title cannot be empty";
-                                        }
-
-                                        return value === "admin" ? "Nice try!" : null;
-                                    }}
+                                    isInvalid={taskTitle.length === 0}
+                                    errorMessage="Task title cannot be empty."
                                     value={taskTitle}
-                                    onChange={(e) => {
 
-                                        setTaskTitle(e.target.value)
-                                    }}
+                                    onValueChange={setTaskTitle}
                                     className='font-inter'
                                 />
                                 <Textarea isRequired className="font-inter" label="Task Description" placeholder="Gotta do something broo 🤯🤯🤯🤯" variant='bordered'
                                     value={taskDescription}
-                                    isInvalid={(taskDescription === "" ? true : false)}
-                                    errorMessage={"Task description cannot be empty !!"}
-                                    onChange={(e) => { setTaskDescription(e.target.value) }}
+                                    // isInvalid={(taskDescription === "" ? true : false)}
+                                    // errorMessage={"Task description cannot be empty !!"}
+                                    isInvalid={taskDescription.length === 0}
+                                    errorMessage="Task description cannot be empty."
+                                    onValueChange={setTaskDescription}
                                 />
 
                                 <Dropdown>
@@ -138,12 +135,13 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
 
                                     </DropdownMenu>
                                 </Dropdown>
-
                             </ModalBody>
                             <ModalFooter className='font-inter'>
                                 <Button color="danger" variant="flat" onPress={onClose}>
                                     Close
                                 </Button>
+                                
+                                
                                 <Button color="primary" onPress={submitTask} isDisabled={(taskTitle === "" || taskDescription === "")}>
                                     Continue
                                 </Button>

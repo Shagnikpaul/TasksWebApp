@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Checkbox } from "@nextui-org/checkbox";
 import './taskbox.css'
-import { Tooltip, Button } from "@nextui-org/react";
+import { Tooltip, Button, Spacer } from "@nextui-org/react";
 
 import { IconDelete } from './../icons/DeleteIcon'
 
@@ -12,9 +12,13 @@ import { EditIcon } from '../icons/EditIcon';
 function TaskBox({ taskData, updateFunction, updateTaskList }) {
     const [color, changeColor] = useState("gray")
     const [IconVisible, setIconVisible] = useState("invisible")
+    const [taskTitle, setTaskTitle] = useState("Loading")
+    const [taskDescription, setTaskDescription] = useState("Loading")
+    
     useEffect(() => {
         // console.log('Tasks details - ', 'title', taskData.title, 'body', taskData.body);
-
+        setTaskTitle(taskData.title)
+        setTaskDescription(taskData.body)
         if (taskData.color !== undefined) {
             changeColor(taskData.color)
         }
@@ -60,8 +64,8 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
                     }
                 }}>
                     <div className="txt-grp px-2">
-                        <p className='text-lg font-semibold'>{taskData.title}</p>
-                        <p className="description-body text-md opacity-65   ">{taskData.body}</p>
+                        <p className='text-lg font-semibold'>{taskTitle}</p>
+                        <p className="description-body text-md opacity-65   ">{taskDescription}</p>
                     </div>
 
                 </Checkbox>
@@ -69,15 +73,16 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
                 <div className="centre-vertically flex flex-col justify-center">
                     <div className="flex">
                         <Tooltip content="Edit task" color='primary' className='font-inter text-sm' closeDelay={100} offset={10} placement='left'>
-                            <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onClick={() => {
+                            <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onPress={() => {
                                 console.log("Edit for ", taskData._id);
 
                             }}>
                                 <EditIcon />
                             </Button>
                         </Tooltip>
-                        <Tooltip  content="Delete task" color='danger' className='font-inter text-sm' closeDelay={100} offset={15} placement='bottom'>
-                            <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onClick={() => {
+                        <Spacer x={2} />
+                        <Tooltip content="Delete task" color='danger' className='font-inter text-sm' closeDelay={100} offset={15} placement='bottom'>
+                            <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onPress={(e) => {
                                 deleteTaskCall(taskData._id)
                             }}>
                                 <IconDelete />

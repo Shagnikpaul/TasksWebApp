@@ -1,6 +1,6 @@
 
 import { Input, Button } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "../components/signinpage/passicon";
 import { Link } from "wouter";
 import axios from 'axios';
@@ -21,6 +21,18 @@ function SignIn() {
     const nav=useNavigate();
 
     const dispatch = useDispatch();
+
+
+useEffect(() => {
+ console.log("Welcome to Sign In Page !!");
+    const k = sessionStorage.getItem("u_name")
+    if(k !== null)
+    console.log('K is there !!!');
+    else
+    console.log('K is not there !!!');
+    
+    
+})
 
     const change = (e) => {
         setInputs({ ...inputs, [e.target.name]: e.target.value });
