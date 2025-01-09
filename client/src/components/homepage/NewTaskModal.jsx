@@ -17,7 +17,7 @@ import {
     DropdownMenu,
     DropdownSection,
     DropdownItem
- } from "@nextui-org/dropdown";
+} from "@nextui-org/dropdown";
 
 import { addTask } from '../../api/calls';
 
@@ -26,7 +26,11 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
     const [taskTitle, setTaskTitle] = useState("");
     const [taskPriority, setTaskPriority] = useState(0)
     const [taskColor, setTaskColor] = useState("gray");
-
+    const priorities = {
+        "Study": 1,
+        "Play": 2,
+        "Important": 3
+    }
     const [taskDescription, setTaskDescription] = useState("");
 
 
@@ -50,7 +54,7 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
     const selectedValue = React.useMemo(
         () => Array.from(selectedKeys).join(", ").replace(/_/g, ""),
         [selectedKeys],
-      );
+    );
 
     return (
         <>
@@ -73,11 +77,11 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
                                     // errorMessage={"Task title cannot be empty !!"}
                                     validate={(value) => {
                                         if (value.length === 0) {
-                                          return "Task title cannot be empty";
+                                            return "Task title cannot be empty";
                                         }
-                              
+
                                         return value === "admin" ? "Nice try!" : null;
-                                      }}
+                                    }}
                                     value={taskTitle}
                                     onChange={(e) => {
 
@@ -95,36 +99,43 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
                                 <Dropdown>
                                     <DropdownTrigger>
                                         <Button className="capitalize" variant="bordered">
-                                        {selectedValue}
+                                            {selectedValue}
                                         </Button>
                                     </DropdownTrigger>
-                                    <DropdownMenu aria-label="Dynamic Actions" 
+                                    <DropdownMenu aria-label="Dynamic Actions"
                                         disallowEmptySelection
                                         // aria-label="Single selection example"
                                         selectedKeys={selectedKeys}
                                         selectionMode="single"
                                         variant="flat"
+                                        onAction={(key) => {
+                                            setTaskPriority(priorities[key])
+                                        }}
                                         onSelectionChange={setSelectedKeys}
                                     >
-                                    
-                                    <DropdownItem key="Study"
-                                     onClick={(e) => { setTaskPriority(1) }}
-                                    >
-                                        Study
-                                    </DropdownItem>
-                                    
-                                    <DropdownItem key="Play"
-                                    onClick={(e) => { setTaskPriority(2) }}
-                                    >
-                                        Play
-                                    </DropdownItem>
-                                    
-                                    <DropdownItem key="Important"
-                                    onClick={(e) => { setTaskPriority(0) }}
-                                    >
-                                    Important
-                                    </DropdownItem>
-                                    
+
+                                        {/* study - 1
+                                    play - 2
+                                    important - 3 */}
+
+                                        <DropdownItem key="Study"
+
+                                        >
+                                            Study
+                                        </DropdownItem>
+
+                                        <DropdownItem key="Play"
+
+                                        >
+                                            Play
+                                        </DropdownItem>
+
+                                        <DropdownItem key="Important"
+
+                                        >
+                                            Important
+                                        </DropdownItem>
+
                                     </DropdownMenu>
                                 </Dropdown>
 

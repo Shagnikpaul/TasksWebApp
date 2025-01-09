@@ -4,12 +4,14 @@ import './taskbox.css'
 import { Tooltip, Button } from "@nextui-org/react";
 
 import { IconDelete } from './../icons/DeleteIcon'
+
 import { deleteTask, updateTask } from '../../api/calls';
+import { EditIcon } from '../icons/EditIcon';
 
 
 function TaskBox({ taskData, updateFunction, updateTaskList }) {
     const [color, changeColor] = useState("gray")
-    const [deleteIconVisible, setDeleteIconVisible] = useState("invisible")
+    const [IconVisible, setIconVisible] = useState("invisible")
     useEffect(() => {
         // console.log('Tasks details - ', 'title', taskData.title, 'body', taskData.body);
 
@@ -21,12 +23,12 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
 
     function onHoverE(taskId) {
         //console.log(`${taskId} is being hovered on`);
-        setDeleteIconVisible("visible")
+        setIconVisible("visible")
     }
 
     function onHoverL(taskId) {
         //console.log(`${taskId} is being hovered off`);
-        setDeleteIconVisible("invisible")
+        setIconVisible("invisible")
     }
 
     function deleteTaskCall(taskId) {
@@ -64,16 +66,25 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
 
                 </Checkbox>
 
-                <Tooltip content="Delete?" color='danger' className='font-inter text-sm' offset={10} placement='left'>
-                    <div className="flex flex-col justify-center ">
+                <div className="centre-vertically flex flex-col justify-center">
+                    <div className="flex">
+                        <Tooltip content="Edit task" color='primary' className='font-inter text-sm' closeDelay={100} offset={10} placement='left'>
+                            <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onClick={() => {
+                                console.log("Edit for ", taskData._id);
 
-                        <Button isIconOnly className={`${deleteIconVisible} bg-red-500/1`} onClick={() => {
-                            deleteTaskCall(taskData._id)
-                        }}>
-                            <IconDelete />
-                        </Button>
+                            }}>
+                                <EditIcon />
+                            </Button>
+                        </Tooltip>
+                        <Tooltip  content="Delete task" color='danger' className='font-inter text-sm' closeDelay={100} offset={15} placement='bottom'>
+                            <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onClick={() => {
+                                deleteTaskCall(taskData._id)
+                            }}>
+                                <IconDelete />
+                            </Button>
+                        </Tooltip>
                     </div>
-                </Tooltip>
+                </div>
             </div>
         </div>
 
