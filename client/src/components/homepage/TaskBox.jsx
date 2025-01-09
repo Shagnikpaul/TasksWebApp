@@ -48,7 +48,7 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
         }}>
             <div className={`flex flex-row justify-between border-2 border-${color}-700 p-3 rounded-lg solid-shadow`}>
 
-                <Checkbox isSelected={taskData.isCompleted} size="md" radius='full' color='secondary' onClick={() => {
+                <Checkbox isSelected={taskData.isCompleted} size="md" radius='full' color='secondary' onChange={() => {
                     console.log(`Task ${taskData._id} was clicked !!`);
                     if (updateFunction !== undefined && !taskData.isCompleted) {
                         updateFunction(taskData._id, false);
