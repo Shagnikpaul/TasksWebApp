@@ -44,9 +44,12 @@ export default function EditTaskModal({ customStyle, taskData, setIconInvisible,
 
     return (
         <>
-            <Button isIconOnly className={customStyle} variant="flat" onPress={drawerOpen}>
-                <EditIcon />
-            </Button>
+            <Tooltip content="Edit task" color='primary' className='font-inter text-sm' closeDelay={100} offset={15} placement='left'>
+                <Button isIconOnly className={customStyle} variant="flat" onPress={drawerOpen}>
+                    <EditIcon />
+                </Button>
+            </Tooltip>
+
             <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
                 <DrawerContent>
                     {(onClose) => (
