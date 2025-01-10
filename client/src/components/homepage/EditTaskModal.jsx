@@ -6,50 +6,85 @@ import {
     DrawerFooter,
     Button,
     useDisclosure,
+    Input,
+    Tooltip,
+    Textarea
 } from "@nextui-org/react";
 import { EditIcon } from "../icons/EditIcon";
+import { useEffect, useState } from "react";
+import { updateTask } from "../../api/calls";
 
 
-
-
-export default function App() {
+export default function EditTaskModal({ customStyle, taskData, setIconInvisible, updateFunction }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [taskTitle, setTaskTitle] = useState(`${taskData.title}`)
+    const [taskDescription, setTaskDescription] = useState(`${taskData.body}`)
+
+    const drawerClose = function () {
+        setTaskTitle(taskData.title)
+        setTaskDescription(taskData.body)
+        onOpenChange()
+    }
+
+    const drawerOpen = function () {
+        setIconInvisible("invisible")
+        onOpenChange()
+    }
+
+    const drawerContinue = function () {
+        updateTask({ email: sessionStorage.getItem("email") }, { id: taskData._id, title: taskTitle, body: taskDescription }).then((r) => {
+            console.log("task was updated with status : ", r);
+            updateFunction(taskTitle, taskDescription, taskData._id)
+            onOpenChange()
+            setTaskDescription(taskDescription)
+            setTaskTitle(taskTitle)
+        })
+
+    }
 
     return (
         <>
-            <Button isIconOnly={true} onPress={onOpen}>
+            <Button isIconOnly className={customStyle} variant="flat" onPress={drawerOpen}>
                 <EditIcon />
             </Button>
             <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
                 <DrawerContent>
                     {(onClose) => (
                         <>
-                            <DrawerHeader className="flex flex-col gap-1">Drawer Title</DrawerHeader>
+                            <DrawerHeader className="flex flex-col gap-1">Log in</DrawerHeader>
                             <DrawerBody>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non
-                                    risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed porttitor
-                                    quam.
-                                </p>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam pulvinar risus non
-                                    risus hendrerit venenatis. Pellentesque sit amet hendrerit risus, sed porttitor
-                                    quam.
-                                </p>
-                                <p>
-                                    Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit dolor
-                                    adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. Velit duis sit
-                                    officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                                    nisi consectetur esse laborum eiusmod pariatur proident Lorem eiusmod et. Culpa
-                                    deserunt nostrud ad veniam.
-                                </p>
+                                <Input
+                                    isRequired
+                                    label="Task Title"
+                                    placeholder="Do something 🤓"
+                                    variant="bordered"
+                                    type='text'
+                                    // isInvalid={(taskTitle === "" ? true : false)}
+                                    // errorMessage={"Task title cannot be empty !!"}
+                                    isInvalid={taskTitle.length === 0}
+                                    errorMessage="Task title cannot be empty."
+                                    value={taskTitle}
+
+                                    onValueChange={setTaskTitle}
+                                    className='font-inter'
+                                />
+                                <Textarea isRequired className="font-inter" label="Task Description" placeholder="Gotta do something broo 🤯🤯🤯🤯" variant='bordered'
+                                    value={taskDescription}
+                                    // isInvalid={(taskDescription === "" ? true : false)}
+                                    // errorMessage={"Task description cannot be empty !!"}
+                                    isInvalid={taskDescription.length === 0}
+                                    errorMessage="Task description cannot be empty."
+                                    onValueChange={setTaskDescription}
+                                />
+
+
                             </DrawerBody>
                             <DrawerFooter>
-                                <Button color="danger" variant="light" onPress={onClose}>
+                                <Button color="danger" variant="flat" onPress={drawerClose}>
                                     Close
                                 </Button>
-                                <Button color="primary" onPress={onClose}>
-                                    Action
+                                <Button color="primary" onPress={drawerContinue} isDisabled={(taskTitle.length === 0 || taskDescription.length === 0)}>
+                                    Continue
                                 </Button>
                             </DrawerFooter>
                         </>

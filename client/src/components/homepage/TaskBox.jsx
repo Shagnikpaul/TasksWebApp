@@ -7,6 +7,7 @@ import { IconDelete } from './../icons/DeleteIcon'
 
 import { deleteTask, updateTask } from '../../api/calls';
 import { EditIcon } from '../icons/EditIcon';
+import EditTaskModal from './EditTaskModal';
 
 
 function TaskBox({ taskData, updateFunction, updateTaskList }) {
@@ -14,7 +15,7 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
     const [IconVisible, setIconVisible] = useState("invisible")
     const [taskTitle, setTaskTitle] = useState("Loading")
     const [taskDescription, setTaskDescription] = useState("Loading")
-    
+
     useEffect(() => {
         // console.log('Tasks details - ', 'title', taskData.title, 'body', taskData.body);
         setTaskTitle(taskData.title)
@@ -24,7 +25,12 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
         }
     }, [])
 
+    const updateTask = function (taskTitle, taskDescription, taskId) {
+        console.log('Ran Update function for task : ', taskId);
+        setTaskDescription(taskDescription)
+        setTaskTitle(taskTitle)
 
+    }
     function onHoverE(taskId) {
         //console.log(`${taskId} is being hovered on`);
         setIconVisible("visible")
@@ -51,7 +57,6 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
             onHoverL(taskData._id)
         }}>
             <div className={`flex flex-row justify-between border-2 border-${color}-700 p-3 rounded-lg solid-shadow`}>
-
                 <Checkbox isSelected={taskData.isCompleted} size="md" radius='full' color='secondary' onChange={() => {
                     console.log(`Task ${taskData._id} was clicked !!`);
                     if (updateFunction !== undefined && !taskData.isCompleted) {
@@ -72,17 +77,19 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
 
                 <div className="centre-vertically flex flex-col justify-center">
                     <div className="flex">
-                        <Tooltip content="Edit task" color='primary' className='font-inter text-sm' closeDelay={100} offset={10} placement='left'>
-                            <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onPress={() => {
+
+
+                        <EditTaskModal updateFunction={updateTask} setIconInvisible={setIconVisible} customStyle={`${IconVisible} bg-red-500/1`} taskData={taskData} />
+                        {/* <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onPress={() => {
                                 console.log("Edit for ", taskData._id);
 
                             }}>
                                 <EditIcon />
-                            </Button>
-                        </Tooltip>
+                            </Button> */}
                         <Spacer x={2} />
                         <Tooltip content="Delete task" color='danger' className='font-inter text-sm' closeDelay={100} offset={15} placement='bottom'>
                             <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onPress={(e) => {
+
                                 deleteTaskCall(taskData._id)
                             }}>
                                 <IconDelete />
