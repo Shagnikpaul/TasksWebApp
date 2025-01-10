@@ -2,26 +2,50 @@
 const router = require("express").Router();
 const User = require("../models/user");
 const List = require("../models/list");
+const Category = require("../models/category");
 
-//CREATE task using id of user and rest of data
-router.post("/addTask/:id" , async(req,res) => {
+//CREATE Category using id of user and rest of data of a category
+
+router.post("/addCategory/:id", async (req, res) => {
     try {
-        const {title,body,email,priority,color} = req.body;
-        const existingUser = await User.findOne({_id:req.params.id,email:email});
-        if(existingUser){
-            var priority2,color2;
-            
-            if(!priority) priority2=0;
-            else priority2 = priority;
-            
-            if(!color) color2='gray';
-            else color2 = color;
-            
-            const list= new List({title,body, user:existingUser, priority:priority2, color:color2});
+        const { category_name, category_emoji, category_color, priority } = req.body;
+        const existingUser = await User.findOne({ _id: req.params.id });
+        if (existingUser) {
+            if (!priority) priority = 0;
+
+            const category = new Category({ category_name, category_emoji, category_color, priority: priority });
+            await category.save().then(() => {
+                res.status(200).json({ category });
+
+                existingUser.Category.push(category);
+                existingUser.save();
+            })
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+//send user id in parameters of req and email in req body, add title,body, category_id of new task
+router.post("/addTask/:id", async (req, res) => {
+    try {
+        const { title, body, category_id, email } = req.body;
+
+        const existingUser = await User.findOne({ _id: req.params.id, email: email });
+
+        const existingCategory = await Category.findById({ _id: category_id });
+
+        if (existingUser && existingCategory) {
+
+            const list = new List({ title, body, user: existingUser, Category: existingCategory });
             await list.save().then(() => {
-                res.status(200).json({list});
+                res.status(200).json({ list });
+
                 existingUser.List.push(list);
                 existingUser.save();
+
+                existingCategory.tasks.push(list);
+                existingCategory.save();
             })
         }
     } catch (error) {
@@ -31,31 +55,34 @@ router.post("/addTask/:id" , async(req,res) => {
 
 //Update Task id of task required
 
-router.put("/updateTask/:id" , async(req,res) => {
+router.put("/updateTask/:id", async (req, res) => {
     try {
-        const {title,body,email} = req.body;
-        const existingUser = await User.findOne({email});
-        if(existingUser){
-            const list=await List.findByIdAndUpdate(req.params.id,{title:title,
-                body:body});
-            list.save().then(() => res.status(200).json({message:"Task updated"}));
+        const { title, body, email, category_id } = req.body;
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            const list = await List.findByIdAndUpdate(req.params.id, {
+                title: title,
+                body: body,
+                Category: category_id,
+            });
+            list.save().then(() => res.status(200).json({ message: "Task updated" }));
         }
     } catch (error) {
         console.log(error);
     }
 });
 
-//Complete Task id of task required
+//Complete Task, id of task required, email of user requred in req body
 
-router.put("/completeTask/:id" , async(req,res) => {
+router.put("/completeTask/:id", async (req, res) => {
     try {
-        const {title,email} = req.body;
+        const { title, email } = req.body;
         const existingUser = await User.findOne(
             { email }
         );
-        if(existingUser){
-            await List.findByIdAndUpdate(req.params.id,{isCompleted:true})
-            .then(() => res.status(200).json({message:"Task Completed"}));
+        if (existingUser) {
+            await List.findByIdAndUpdate(req.params.id, { isCompleted: true })
+                .then(() => res.status(200).json({ message: "Task Completed" }));
         }
     } catch (error) {
         console.log(error);
@@ -64,60 +91,124 @@ router.put("/completeTask/:id" , async(req,res) => {
 
 //Delete Task id of task required
 
-router.delete("/deleteTask/:id" , async(req,res) => {
+router.delete("/deleteTask/:id", async (req, res) => {
     try {
-        const {title,email} = req.body;
+        const { title, email } = req.body;
         const existingUser = await User.findOneAndUpdate(
-            { email }, 
-            { $pull: {List: req.params.id} }
+            { email },
+            { $pull: { List: req.params.id } }
         );
-        if(existingUser){
+        if (existingUser) {
             await List.findByIdAndDelete(req.params.id)
-            .then(() => res.status(200).json({message:"Task Deleted"}));
+                .then(() => res.status(200).json({ message: "Task Deleted" }));
         }
     } catch (error) {
         console.log(error);
     }
 });
 
-//GET Tasks id of user required
+//GET Tasks, id of user required
 
-router.get("/getTasks/:id" , async(req,res) => {
+router.get("/getTasks/:id", async (req, res) => {
     try {
-        const list= await ( List.find({user:req.params.id}).sort({priority:-1}));
-        if(list.length!=0)
-            res.status(200).json({list, "message":"tasks"});
+        const list = await (List.find({ user: req.params.id }));
+        if (list.length != 0)
+            res.status(200).json({ list, "message": "tasks" });
         else
-            res.status(200).json({"message":"no tasks"});
+            res.status(200).json({ "message": "no tasks" });
         //use .sort({createdAt: -1}) opposite to created At id use priority number
     } catch (error) {
         console.log(error);
     }
 });
 
-router.get("/getDoneTasks/:id" , async(req,res) => {
+// GET the task done => iscompleted is set to true send user id in params  
+router.get("/getDoneTasks/:id", async (req, res) => {
     try {
-        const list= await ( List.find({user:req.params.id}).find({isCompleted:true}).sort({priority:-1}));
-        if(list.length!=0)
-            res.status(200).json({list});
+        const list = await (List.find({ user: req.params.id }).find({ isCompleted: true }));
+        if (list.length != 0)
+            res.status(200).json({ list });
         else
-            res.status(200).json({"message":"no tasks"});
+            res.status(200).json({ "message": "no tasks" });
         //use .sort({createdAt: -1}) opposite to created At id use priority number
     } catch (error) {
         console.log(error);
     }
 });
 
-//undo task
-router.put("/undoTask/:id" , async(req,res) => {
+//UNDO task same as completeTask, give id of task
+router.put("/undoTask/:id", async (req, res) => {
     try {
-        const {title,email} = req.body;
+        const { title, email } = req.body;
         const existingUser = await User.findOne(
             { email }
         );
-        if(existingUser){
-            await List.findByIdAndUpdate(req.params.id,{isCompleted:false})
-            .then(() => res.status(200).json({message:"Task Undone"}));
+        if (existingUser) {
+            await List.findByIdAndUpdate(req.params.id, { isCompleted: false })
+                .then(() => res.status(200).json({ message: "Task Undone" }));
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
+
+//Update Category category id required in req params, rest of the stuff in req body
+
+router.put("/updateCategory/:id", async (req, res) => {
+    try {
+        // const { title, body, email, category_id } = req.body;
+        const { category_name, category_emoji, category_color, priority } = req.body;
+
+        const existingCategory = await Category.findById(req.params.id);
+        
+        if(!existingCategory){ 
+            res.status(200).json({ message: "Category Not found" });
+            return;
+        }
+
+        const category = await Category.findByIdAndUpdate(req.params.id, {
+            category_name: category_name,
+            category_emoji: category_emoji,
+            category_color: category_color,
+            priority: priority
+        });
+        category.save().then(() => res.status(200).json({ message: "Category updated" }));
+        
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+// pass user id in req.params.id
+router.get("/getCategories/:id", async (req, res) => {
+    try {
+        const categories = await (Category.find({ user: req.params.id }));
+        if (categories.length != 0)
+            res.status(200).json({ categories, "message": "categories" });
+        else
+            res.status(200).json({ "message": "no categories found" });
+        //use .sort({createdAt: -1}) opposite to created At id use priority number
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+//Delete Category, id of Category required, email of user required in req body
+router.delete("/deleteCategory/:id", async (req, res) => {
+    try {
+        const { title, email } = req.body;
+        const existingUser = await User.findOneAndUpdate(
+            { email },
+            { $pull: { Category: req.params.id } }
+        );
+        const existingTasks = await List.deleteMany(
+            { Category: req.params.id }
+        );
+        if (existingUser) {
+            await Category.findByIdAndDelete(req.params.id)
+                .then(() => res.status(200).json({ message: "Category Deleted" }));
         }
     } catch (error) {
         console.log(error);

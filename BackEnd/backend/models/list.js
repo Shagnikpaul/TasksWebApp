@@ -1,35 +1,41 @@
 const mongoose = require("mongoose");
 const listSchema = new mongoose.Schema({
     title: {
-        type : String,
-        required : true,
-    },
-    body: {
-        type : String,
+        type: String,
         required: true,
     },
-    priority:{
-        type : Number,
-        required: false,
-        default : 0
-    },
-    color:{
+    body: {
         type: String,
-        enum: ['red', 'green', 'blue', 'yellow', 'gray', 'pink', 'black', 'white'],
-        require: false,
-        default: 'gray'
+        required: true,
     },
-    isCompleted :{
+    // priority:{
+    //     type : Number,
+    //     required: false,
+    //     default : 0
+    // },
+    // color:{
+    //     type: String,
+    //     enum: ['red', 'green', 'blue', 'yellow', 'gray', 'pink', 'black', 'white'],
+    //     require: false,
+    //     default: 'gray'
+    // },
+    isCompleted: {
         type: Boolean,
-        default:false
+        default: false
     },
     user: [
         {
-            type : mongoose.Types.ObjectId,
-            ref : "User",
+            type: mongoose.Types.ObjectId,
+            ref: "User",
         },
     ],
-    
+    Category: [
+        {
+            type: mongoose.Types.ObjectId,
+            ref: "Category",
+        },
+    ]
+
 });
 
-module.exports = mongoose.model("List",listSchema);
+module.exports = mongoose.model("List", listSchema);
