@@ -8,17 +8,6 @@ const listSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    // priority:{
-    //     type : Number,
-    //     required: false,
-    //     default : 0
-    // },
-    // color:{
-    //     type: String,
-    //     enum: ['red', 'green', 'blue', 'yellow', 'gray', 'pink', 'black', 'white'],
-    //     require: false,
-    //     default: 'gray'
-    // },
     isCompleted: {
         type: Boolean,
         default: false

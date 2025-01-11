@@ -5,7 +5,7 @@ const conn = async () => {
         dotenv.config({ path: '../.env' })
         console.log("mongo connection string :", process.env.mongo);
         await mongoose.connect(process.env.mongo).then(() => {
-            // console.log("Connected")
+            
             console.log('Mongo Connection successful');
 
         })
