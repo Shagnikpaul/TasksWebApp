@@ -3,6 +3,9 @@ const router = require("express").Router();
 const User = require("../models/user");
 const List = require("../models/list");
 const Category = require("../models/category");
+
+
+
 //requires both the objects as json
 const incrementCats = async (new_category, categories) => {
     categories.forEach(async (cat) => {
@@ -11,11 +14,16 @@ const incrementCats = async (new_category, categories) => {
                 category_name: cat.category_name,
                 category_emoji: cat.category_emoji,
                 category_color: cat.category_color,
-                priority: priority + 1
+                priority: cat.priority + 1
             });
         }
     });
 }
+
+
+
+
+
 //requires both the objects as json
 const decrementCats = async (new_category, categories) => {
     categories.forEach(async (cat) => {
@@ -29,6 +37,15 @@ const decrementCats = async (new_category, categories) => {
         }
     });
 }
+
+
+
+
+
+
+
+
+
 
 //CREATE Category using id of user and rest of data of a category
 
