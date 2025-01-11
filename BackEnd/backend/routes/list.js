@@ -11,9 +11,9 @@ router.post("/addCategory/:id", async (req, res) => {
         const { category_name, category_emoji, category_color, priority } = req.body;
         const existingUser = await User.findOne({ _id: req.params.id });
         if (existingUser) {
-            if (!priority) priority = 0;
+            // if (!priority) priority = 0;
 
-            const category = new Category({ category_name, category_emoji, category_color, priority: priority });
+            const category = new Category({ category_name, category_emoji, category_color, priority: priority, user: req.params.id });
             await category.save().then(() => {
                 res.status(200).json({ category });
 
@@ -58,13 +58,31 @@ router.post("/addTask/:id", async (req, res) => {
 router.put("/updateTask/:id", async (req, res) => {
     try {
         const { title, body, email, category_id } = req.body;
+        
+        //delete the prev list for old category
+        const prevList = await List.findById(req.params.id).select('Category');
+                 
+        var prevCategoryId  =  prevList.Category[0].toJSON();
+        
+        // console.log('prevCategoryId',prevCategoryId);
+        
+        if(prevCategoryId)
+        await Category.findByIdAndUpdate(prevCategoryId, { $pull: { tasks: req.params.id } })
+
         const existingUser = await User.findOne({ email });
-        if (existingUser) {
+        //check new category exists or not
+        const existingCategory = await Category.findById(category_id);
+
+        if (existingUser && existingCategory) {
             const list = await List.findByIdAndUpdate(req.params.id, {
                 title: title,
                 body: body,
                 Category: category_id,
             });
+
+            existingCategory.tasks.push(list);
+            existingCategory.save();
+
             list.save().then(() => res.status(200).json({ message: "Task updated" }));
         }
     } catch (error) {
@@ -159,12 +177,19 @@ router.put("/undoTask/:id", async (req, res) => {
 router.put("/updateCategory/:id", async (req, res) => {
     try {
         // const { title, body, email, category_id } = req.body;
-        const { category_name, category_emoji, category_color, priority } = req.body;
+        const { category_name, category_emoji, category_color, priority , email} = req.body;
 
         const existingCategory = await Category.findById(req.params.id);
-        
-        if(!existingCategory){ 
+
+        const existingUser = await List.find({email: email});
+
+        if (!existingCategory) {
             res.status(200).json({ message: "Category Not found" });
+            return;
+        }
+
+        if (!existingUser) {
+            res.status(200).json({ message: "User Not found" });
             return;
         }
 
@@ -175,7 +200,7 @@ router.put("/updateCategory/:id", async (req, res) => {
             priority: priority
         });
         category.save().then(() => res.status(200).json({ message: "Category updated" }));
-        
+
     } catch (error) {
         console.log(error);
     }

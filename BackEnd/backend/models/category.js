@@ -10,7 +10,7 @@ const listSchema = new mongoose.Schema({
     },
     category_color:{
         type: String,
-        enum: ['red', 'green', 'blue', 'yellow', 'gray', 'pink', 'black', 'white'],
+        enum: ['red', 'green', 'blue', 'yellow', 'gray', 'purple', 'black', 'white'],
         require: false,
         default: 'gray'
     },
