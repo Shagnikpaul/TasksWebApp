@@ -5,12 +5,11 @@ const List = require("../models/list");
 const Category = require("../models/category");
 
 
-
 //requires both the objects as json
-const incrementCats = async (new_category, categories) => {
+const incrementPriority = async (new_category, categories) => {
     categories.forEach(async (cat) => {
         if (cat.priority >= new_category.priority) {
-            await Category.findByIdAndUpdate(cat.id, {
+            Category.findByIdAndUpdate(cat.id, {
                 category_name: cat.category_name,
                 category_emoji: cat.category_emoji,
                 category_color: cat.category_color,
@@ -22,29 +21,18 @@ const incrementCats = async (new_category, categories) => {
 
 
 
-
-
-//requires both the objects as json
-const decrementCats = async (new_category, categories) => {
+const decrementPriority = async (new_category, categories) => {
     categories.forEach(async (cat) => {
         if (cat.priority >= new_category.priority) {
-            await Category.findByIdAndUpdate(cat.id, {
+            Category.findByIdAndUpdate(cat.id, {
                 category_name: cat.category_name,
                 category_emoji: cat.category_emoji,
                 category_color: cat.category_color,
-                priority: priority - 1
+                priority: cat.priority - 1
             });
         }
     });
 }
-
-
-
-
-
-
-
-
 
 
 //CREATE Category using id of user and rest of data of a category
@@ -54,10 +42,13 @@ router.post("/addCategory/:id", async (req, res) => {
         const { category_name, category_emoji, category_color, priority } = req.body;
 
         const existingUser = await User.findOne({ _id: req.params.id });
+        if(!existingUser) {
+            res.status(200).json({message:"user not found"});
+        }
         if (existingUser) {
 
-            //fix here
-            incrementCats({ priority }, await Category.find({ user: req.params.id }));
+            //fixed here
+            incrementPriority({ priority: priority }, await Category.find({ user: req.params.id }));
 
             const category = new Category({ category_name, category_emoji, category_color, priority: priority, user: req.params.id });
             await category.save().then(() => {
@@ -65,22 +56,30 @@ router.post("/addCategory/:id", async (req, res) => {
                 existingUser.Category.push(category);
                 existingUser.save();
 
-                res.status(200).json({ category, message: "Category added" });
+                res.status(200).json({ category, message: "category added" });
             })
         }
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"unexpected error"});
+       
     }
 });
 
-//send user id in parameters of req and email in req body, add title,body, category_id of new task
+//CREATE NEW TASK send user id in parameters of request and email in request body, add title,body, category_id of new task
 router.post("/addTask/:id", async (req, res) => {
     try {
         const { title, body, category_id, email } = req.body;
 
         const existingUser = await User.findOne({ _id: req.params.id, email: email });
+        if(!existingUser) {
+            res.status(200).json({message:"user not found"});
+        }
 
         const existingCategory = await Category.findById({ _id: category_id });
+        if(!existingCategory){
+            res.status(200).json({message:"category not found"});
+        }
 
         if (existingUser && existingCategory) {
 
@@ -93,15 +92,17 @@ router.post("/addTask/:id", async (req, res) => {
                 existingCategory.tasks.push(list);
                 existingCategory.save();
 
-                res.status(200).json({ list, message: "Task added" });
+                res.status(200).json({ list, message: "task added" });
             })
         }
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"unexpected error"});
+        
     }
 });
 
-//Update Task id of task required
+//UPDATE Task,  Task id of task required , new task title, body, email, category_id is required in request body
 
 router.put("/updateTask/:id", async (req, res) => {
     try {
@@ -116,9 +117,18 @@ router.put("/updateTask/:id", async (req, res) => {
 
         if (prevCategoryId)
             await Category.findByIdAndUpdate(prevCategoryId, { $pull: { tasks: req.params.id } })
+        else{
+            res.status(200).json({error, message:"new category not found"});
+            return; 
+        }
 
         const existingUser = await User.findOne({ email: email });
+        
+        if(!existingUser){
+            res.status(200).json({message:"user not found"});
+        }
         //check new category exists or not
+        
         const existingCategory = await Category.findById(category_id);
 
         if (existingUser && existingCategory) {
@@ -135,10 +145,12 @@ router.put("/updateTask/:id", async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
-//Complete Task, id of task required, email of user requred in req body
+//COMPLETE Task, id of task required, email of user requred in req body
 
 router.put("/completeTask/:id", async (req, res) => {
     try {
@@ -149,9 +161,13 @@ router.put("/completeTask/:id", async (req, res) => {
         if (existingUser) {
             await List.findByIdAndUpdate(req.params.id, { isCompleted: true })
                 .then(() => res.status(200).json({ message: "Task completed" }));
+        }else{
+            res.status(200).json({error, message:"user not found"});
         }
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
@@ -163,7 +179,7 @@ router.delete("/deleteTask/:id", async (req, res) => {
 
         const user = await User.findOne({ email });
         if (!user) {
-            res.status(200).json({ message: "User not found" });
+            res.status(200).json({ message: "user not found" });
             return;
         }
 
@@ -173,6 +189,9 @@ router.delete("/deleteTask/:id", async (req, res) => {
         );
 
         const prevList = await List.findById(req.params.id).select('Category');
+        if(!prevList){
+            res.status(200).json({message:"task not found"})
+        }
 
         const prevCategoryId = prevList.Category[0].toJSON;
 
@@ -185,6 +204,8 @@ router.delete("/deleteTask/:id", async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
@@ -200,6 +221,8 @@ router.get("/getTasks/:id", async (req, res) => {
         //use .sort({createdAt: -1}) opposite to created At id use priority number
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
@@ -214,6 +237,8 @@ router.get("/getDoneTasks/:id", async (req, res) => {
         //use .sort({createdAt: -1}) opposite to created At id use priority number
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
@@ -227,27 +252,33 @@ router.put("/undoTask/:id", async (req, res) => {
         if (existingUser) {
             await List.findByIdAndUpdate(req.params.id, { isCompleted: false })
                 .then(() => res.status(200).json({ message: "Task Undone" }));
+        }else{
+            res.status(200).json({error, message:"user not found"});
         }
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
 
 
-//Update Category category id required in req params, rest of the stuff in req body
+//Update Category category id required in req params, new category name,emoji,color,priority and user_id in req body
 
 router.put("/updateCategory/:id", async (req, res) => {
     try {
         // const { title, body, email, category_id } = req.body;
-        const { category_name, category_emoji, category_color, priority, email } = req.body;
+        const { category_name, category_emoji, category_color, priority, user_id } = req.body;
 
         //fix here
-        const existingCategory = await Category.findById(req.params.id).select('priority').toJSON();
+        const prevCategory = await Category.findById(req.params.id);
+        const prevCategoryPriority = prevCategory.get('priority') 
 
-        const existingUser = await List.find({ email: email });
 
-        if (!existingCategory) {
+        const existingUser = await User.findById(user_id);
+
+        if (!prevCategory) {
             res.status(200).json({ message: "Category Not found" });
             return;
         }
@@ -257,13 +288,12 @@ router.put("/updateCategory/:id", async (req, res) => {
             return;
         }
 
-        //fix here
-        if (existingCategory > priority) {
-            decrementCats({ priority }, await Category.find({ user: req.params.id }));
-        } else {
-            incrementCats({ priority }, await Category.find({ user: req.params.id }));
-        }
+        // console.log('prev prio', prevCategoryPriority, ' new prio ', priority);
 
+        //change priority of rest of the data
+        decrementPriority({ priority: prevCategoryPriority }, await Category.find({ user: user_id }));
+        incrementPriority({ priority: priority }, await Category.find({ user: user_id }));
+        
         const category = await Category.findByIdAndUpdate(req.params.id, {
             category_name: category_name,
             category_emoji: category_emoji,
@@ -274,13 +304,15 @@ router.put("/updateCategory/:id", async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
-// pass user id in req.params.id
+// pass user id in request parameter
 router.get("/getCategories/:id", async (req, res) => {
     try {
-        const categories = await (Category.find({ user: req.params.id }));
+        const categories = await (Category.find({ user: req.params.id }).sort('priority'));
         if (categories.length != 0)
             res.status(200).json({ categories, message: "Category list" });
         else
@@ -288,6 +320,8 @@ router.get("/getCategories/:id", async (req, res) => {
         //use .sort({createdAt: -1}) opposite to created At id use priority number
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
@@ -295,25 +329,36 @@ router.get("/getCategories/:id", async (req, res) => {
 router.delete("/deleteCategory/:id", async (req, res) => {
     try {
         const { user_id } = req.body;
-        const existingUser = await User.findOneAndUpdate(
-            { email },
+        const prevCategoryPriority = Category.findById(req.params.id);
+        if(!prevCategoryPriority){
+            res.status(200).json({message:"no category found"})
+            return;
+        }
+        const existingUser = User.findByIdAndUpdate(
+             user_id ,
             { $pull: { Category: req.params.id } }
         );
+        if(!existingUser){
+            res.status(200).json({message:"user not found"})
+        }
         await List.deleteMany(
             { Category: req.params.id }
         );
         if (existingUser) {
 
-            const catPrio = await Category.findById(req.params.id).select('priority').toJSON();
+            const prevCategory = await Category.findById(req.params.id);
+            
 
             //fix here
-            decrementCats({ catPrio }, await Category.find({ user: user_id }));
+            decrementPriority({ priority:prevCategory }, await Category.find({ user: user_id }));
 
             await Category.findByIdAndDelete(req.params.id)
                 .then(() => res.status(200).json({ message: "Category Deleted" }));
         }
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
@@ -329,6 +374,8 @@ router.get("/getTask/:id", async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        res.status(200).json({error, message:"error"});
+        return; 
     }
 });
 
