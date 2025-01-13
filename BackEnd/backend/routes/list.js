@@ -9,7 +9,7 @@ const Category = require("../models/category");
 const incrementPriority = async (new_category, categories) => {
     categories.forEach(async (cat) => {
         if (cat.priority >= new_category.priority) {
-            Category.findByIdAndUpdate(cat.id, {
+            await Category.findByIdAndUpdate(cat.id, {
                 category_name: cat.category_name,
                 category_emoji: cat.category_emoji,
                 category_color: cat.category_color,
@@ -24,7 +24,7 @@ const incrementPriority = async (new_category, categories) => {
 const decrementPriority = async (new_category, categories) => {
     categories.forEach(async (cat) => {
         if (cat.priority >= new_category.priority) {
-            Category.findByIdAndUpdate(cat.id, {
+            await Category.findByIdAndUpdate(cat.id, {
                 category_name: cat.category_name,
                 category_emoji: cat.category_emoji,
                 category_color: cat.category_color,
