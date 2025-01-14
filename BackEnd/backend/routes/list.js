@@ -380,4 +380,29 @@ router.get("/getTask/:id", async (req, res) => {
 });
 
 
+router.get("/getCategoryWiseTask/:id", async (req, res) => {
+    try {
+        const { user_id } = req.body;
+        const category_id = req.params.id;
+
+        const existingUser = await User.findById(user_id);
+        if (!existingUser) {
+            res.status(200).json({ message: "user not found" });
+        }
+
+        const tasks = await Category.findById( category_id ).get('tasks');
+        const foo = []
+        tasks.forEach(async (e) => {
+             foo.push(await List.findById(e));
+        })
+
+        res.status(200).json({foo, message: "List of tasks category wise"})
+    } catch (error) {
+        console.log(error);
+        res.status(200).json({ error, message: "unexpected error" });
+
+    }
+});
+
+
 module.exports = router;
