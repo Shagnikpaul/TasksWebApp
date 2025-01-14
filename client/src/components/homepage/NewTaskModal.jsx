@@ -18,22 +18,18 @@ import {
     DropdownSection,
     DropdownItem
 } from "@nextui-org/dropdown";
-
+import PropTypes from 'prop-types';
 import { addTask } from '../../api/calls';
 import { IconDelete } from '../icons/DeleteIcon';
+import { chiptxtColors } from '../../utils/colors';
 
-export default function NewTaskModal({ updateFunction, userId, userEmail }) {
+
+export default function NewTaskModal({ updateFunction, userId, userEmail, currentCategories }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [taskTitle, setTaskTitle] = useState("");
-    const [taskPriority, setTaskPriority] = useState(0)
-    const [taskColor, setTaskColor] = useState("gray");
-    const priorities = {
-        "Study": 1,
-        "Play": 2,
-        "Important": 3
-    }
+    const [chosenCategory, setChosenCategory] = useState({ category_name: "Select Task Category", category_emoji: "➕" })
     const [taskDescription, setTaskDescription] = useState("");
-
+    const [selectedKey, setSelectedKey] = React.useState(new Set([""]));
 
 
 
@@ -41,21 +37,21 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
 
     const submitTask = function (e) {
         console.log("Task sumbmission initiated ... ");
-        console.log(`Task Title : ${taskTitle} Task Description : ${taskDescription} Task Priority :${taskPriority}`);
-        addTask({ email: userEmail, id: userId }, { title: taskTitle, body: taskDescription, priority: taskPriority, color: taskColor }).then((r) => {
+        console.log(`Task Title : ${taskTitle} Task Description : ${taskDescription} Task Category :${chosenCategory}`);
+        addTask({ email: userEmail, id: userId }, { title: taskTitle, body: taskDescription, category_id: chosenCategory['_id'], }).then((r) => {
             console.log("Added a task with response : ", r);
-            
+
             updateFunction(userId, userEmail)
             onOpenChange()
         })
 
     }
 
-    const [selectedKeys, setSelectedKeys] = React.useState(new Set(["Set Priority"]));
+
 
     const selectedValue = React.useMemo(
-        () => Array.from(selectedKeys).join(", ").replace(/_/g, ""),
-        [selectedKeys],
+        () => Array.from(selectedKey).join(", ").replace(/_/g, ""),
+        [selectedKey],
     );
 
     return (
@@ -95,43 +91,31 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
 
                                 <Dropdown>
                                     <DropdownTrigger>
-                                        <Button className="capitalize" variant="bordered">
-                                            {selectedValue}
+                                        <Button startContent={<p>{chosenCategory['category_emoji']}</p>} className="capitalize" variant="bordered">
+                                            {chosenCategory['category_name']}
                                         </Button>
                                     </DropdownTrigger>
                                     <DropdownMenu aria-label="Dynamic Actions"
                                         disallowEmptySelection
                                         // aria-label="Single selection example"
-                                        selectedKeys={selectedKeys}
+                                        selectedKeys={selectedKey}
                                         selectionMode="single"
                                         variant="flat"
                                         onAction={(key) => {
-                                            setTaskPriority(priorities[key])
+                                            console.log("Category : ",key);
+                                            
+
                                         }}
-                                        onSelectionChange={setSelectedKeys}
+                                        onSelectionChange={setSelectedKey}
                                     >
 
                                         {/* study - 1
                                     play - 2
                                     important - 3 */}
 
-                                        <DropdownItem key="Study"
-
-                                        >
-                                            Study
-                                        </DropdownItem>
-
-                                        <DropdownItem key="Play"
-
-                                        >
-                                            Play
-                                        </DropdownItem>
-
-                                        <DropdownItem key="Important"
-
-                                        >
-                                            Important
-                                        </DropdownItem>
+                                        {currentCategories.map(c => <DropdownItem onPress={() => {
+                                            setChosenCategory(c)
+                                        }} className={chiptxtColors[c.category_color]} endContent={<p>{c['category_emoji']}</p>} key={c['_id']}>{c['category_name']}</DropdownItem>)}
 
                                     </DropdownMenu>
                                 </Dropdown>
@@ -140,8 +124,8 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
                                 <Button color="danger" variant="flat" onPress={onClose}>
                                     Close
                                 </Button>
-                                
-                                
+
+
                                 <Button color="primary" onPress={submitTask} isDisabled={(taskTitle === "" || taskDescription === "")}>
                                     Continue
                                 </Button>
@@ -158,3 +142,9 @@ export default function NewTaskModal({ updateFunction, userId, userEmail }) {
 
 
 
+NewTaskModal.propTypes = {
+    updateFunction: PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
+    userEmail: PropTypes.string.isRequired,
+    currentCategories: PropTypes.array.isRequired
+}

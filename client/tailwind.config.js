@@ -31,9 +31,23 @@ export default {
   },
   variants: {
     extend: {
-        display: ["group-hover"],
+      display: ["group-hover"],
     },
   },
   darkMode: "class",
-  plugins: [nextui({addCommonColors: true,})],
+  plugins: [nextui(
+    {
+      addCommonColors: true,
+      // themes: {
+      //   dark: {
+      //     colors: {
+      //       primary: {
+      //         DEFAULT: "#BEF264",
+      //         foreground: "#000000",
+      //       },
+      //       focus: "#BEF264",
+      //     },
+      //   },
+      // }
+    })],
 }

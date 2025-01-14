@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import TaskBox from './TaskBox'
 
 
-function TaskGroup({ taskList, category, updateFunction, updateTaskListFunction }) {
+function TaskGroup({ taskList, category, completeTask, updateTaskListFunction }) {
     return (
         <>
             <div className="mt-10 task-group flex justify-center ">
@@ -12,7 +12,7 @@ function TaskGroup({ taskList, category, updateFunction, updateTaskListFunction 
                         <p className='text-lg  inline-flex'>{category}</p>
                         <div className="task-group-boxes flex flex-col gap-5 min-w-[900px]">
 
-                            {(taskList === undefined || taskList.length === 0) ? <p className='text-center text-2xl opacity-25'>{`Empty ...`}</p> : taskList.map(v => (<TaskBox updateFunction={updateFunction}     updateTaskList={updateTaskListFunction} taskData={v} key={v['_id']} ></TaskBox>))}
+                            {(taskList === undefined || taskList.length === 0) ? <p className='text-center text-2xl opacity-25'>{`Empty ...`}</p> : taskList.map(v => (<TaskBox category={category} completeTask={completeTask} updateTaskList={updateTaskListFunction} taskData={v} key={v['_id']} ></TaskBox>))}
 
                             {/* <TaskBox></TaskBox>
             <TaskBox></TaskBox>
@@ -31,7 +31,7 @@ function TaskGroup({ taskList, category, updateFunction, updateTaskListFunction 
 TaskGroup.propTypes = {
     taskList: PropTypes.array,
     category: PropTypes.string.isRequired,
-    updateFunction: PropTypes.func,
+    completeTask: PropTypes.func,
     updateTaskListFunction: PropTypes.func
 }
 

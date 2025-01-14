@@ -1,4 +1,5 @@
 import axios from "axios"
+
 // import dotenv from "dotenv"
 // dotenv.config({ path: '../.env' })
 const d_uri = "http://localhost:8000"
@@ -12,8 +13,7 @@ export async function addTask(user, task) {
         email: user.email,
         title: task.title,
         body: task.body,
-        priority: task.priority,
-        color: task.color
+        category_id: task.category_id,
     }
     try {
         return await axios.post(`${d_uri}/api/v2/addTask/${user.id}`, payload)
@@ -175,6 +175,27 @@ export async function getTasks(user, task) {
                 return error;
             })
 
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+
+
+
+
+
+
+export async function getCategories(userId) {
+    try {
+        return await axios.get(`${d_uri}/api/v2/getCategories/${userId}`)
+            .then((r) => {
+                return r.data
+            })
+            .catch((e) => {
+                return e
+            })
     }
     catch (error) {
         return error;

@@ -10,8 +10,8 @@ import { EditIcon } from '../icons/EditIcon';
 import EditTaskModal from './EditTaskModal';
 
 
-function TaskBox({ taskData, updateFunction, updateTaskList }) {
-    const [color, changeColor] = useState("gray")
+function TaskBox({ taskData, completeTask, updateTaskList, category }) {
+    const [color, changeColor] = useState("green")
     const [IconVisible, setIconVisible] = useState("invisible")
     const [taskTitle, setTaskTitle] = useState("Loading")
     const [taskDescription, setTaskDescription] = useState("Loading")
@@ -20,6 +20,7 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
         // console.log('Tasks details - ', 'title', taskData.title, 'body', taskData.body);
         setTaskTitle(taskData.title)
         setTaskDescription(taskData.body)
+        
         if (taskData.color !== undefined) {
             changeColor(taskData.color)
         }
@@ -56,20 +57,20 @@ function TaskBox({ taskData, updateFunction, updateTaskList }) {
         }} onMouseLeave={() => {
             onHoverL(taskData._id)
         }}>
-            <div className={`flex flex-row justify-between border-2 border-${color}-700 p-3 rounded-lg solid-shadow`}>
-                <Checkbox isSelected={taskData.isCompleted} size="md" radius='full' color='secondary' onChange={() => {
+            <div className={`flex flex-row justify-between border-2 border-${color}-400 p-3 rounded-lg solid-shadow`}>
+                <Checkbox isSelected={taskData.isCompleted} size="md" radius='full' color='primary' onChange={() => {
                     console.log(`Task ${taskData._id} was clicked !!`);
-                    if (updateFunction !== undefined && !taskData.isCompleted) {
-                        updateFunction(taskData._id, false);
+                    if (completeTask !== undefined && !taskData.isCompleted) {
+                        completeTask(taskData._id, false);
                     }
-                    else if (updateFunction !== undefined && taskData.isCompleted) {
+                    else if (completeTask !== undefined && taskData.isCompleted) {
                         console.log("Nuh Uh task was already completed so we undo it 😈😈😈😈... ");
-                        updateFunction(taskData._id, true)
+                        completeTask(taskData._id, true)
 
                     }
                 }}>
                     <div className="txt-grp px-2">
-                        <p className='text-lg font-semibold'>{taskTitle}</p>
+                        <p className='text-lg font-semibold'>{taskTitle} - {taskData.Category}</p>
                         <p className="description-body text-md opacity-65   ">{taskDescription}</p>
                     </div>
 

@@ -1,21 +1,13 @@
 import { Chip } from "@nextui-org/react";
 
 import PropTypes from 'prop-types';
-export default function ChipGroup({ topics }) {
-    const t = topics.map(tp =>
-        <Chip
-            key={tp.topic_name}
-            startContent={<p>{tp.emoji}</p>}
-            variant="flat"
-            size="lg"
-            color="success"
-            radius='sm'
-            
-        >{tp.topic_name}</Chip>
-    )
+import SingleChip from "./SingleChip";
+
+export default function ChipGroup({ categories }) {
+
     return (
         <div className="flex gap-2 justify-center mt-5">
-            {t} 
+            {categories.map(r => <SingleChip key={r['_id']} data={r} />)}
         </div>
 
     )
@@ -23,5 +15,5 @@ export default function ChipGroup({ topics }) {
 
 
 ChipGroup.propTypes = {
-    topics: PropTypes.array.isRequired
+    categories: PropTypes.array.isRequired
 }

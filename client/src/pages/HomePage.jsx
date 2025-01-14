@@ -7,7 +7,7 @@ import NavBarTop from '../components/NavBarTop'
 import data from '../utils/sample_data';
 
 import { useSelector } from "react-redux";
-import { getTasks, getDoneTasks, completeTask, undoTask } from '../api/calls';
+import { getTasks, getDoneTasks, completeTask, undoTask, getCategories } from '../api/calls';
 import TaskGroup from '../components/homepage/TaskGroup';
 import NewTaskModal from '../components/homepage/NewTaskModal';
 
@@ -21,6 +21,12 @@ export default function HomePage() {
   const [userTasks, setUserTasks] = useState([])
   const [pendingTasks, setPendingTasks] = useState([])
   const [completedTasks, setCompletedTasks] = useState([])
+  const [categories, setCategories] = useState([])
+
+  const [taskList, setTaskList] = useState([])
+
+
+
   useEffect(() => {
     const userId = sessionStorage.getItem("id");
     const userEmail = sessionStorage.getItem("email")
@@ -30,7 +36,21 @@ export default function HomePage() {
 
     })
 
+    getCategories(userId).then((r) => {
 
+      if (r['categories'].length !== 0) {
+        console.log("categories were updated ... ");
+
+        setCategories(r['categories'])
+        
+        categorizeAndSetTaskList(r['categories'])
+      }
+      else {
+        console.log("No categories are there");
+
+      }
+
+    })
 
 
 
@@ -38,31 +58,37 @@ export default function HomePage() {
 
 
 
+
+  const categorizeAndSetTaskList = async function (cats) {
+
+
+    cats.map(fu)
+    console.log('tasllist ',taskList);
+    
+  }
+
+  const fu = function (c) {
+    setTaskList(o => [...o, []])
+  }
+
   const updateTaskData = async function (userId, userEmail) {
     console.log('id', userId, 'email', userEmail);
-
-
     getTasks({ id: userId }, null).then((r) => {
-      
-      console.log("r is ",r);
-      
+
+      //console.log("r is ",r);
+
+
       if (r['message'] === 'tasks') {
         setUserTasks(r['list'])
         console.log('user tasks', r['list']);
         setPendingTasks(
-          r['list'].filter(o1 => !o1.isCompleted).sort((a,b)=>
-            {
-              return a.priority-b.priority
-            })
+          r['list'].filter(o1 => !o1.isCompleted)
         )
-        console.log('pending ', r['list'].filter(o1 => !o1.isCompleted).sort((a,b)=>
-          {
-            return a.priority-b.priority
-          }));
+        console.log('pending ', r['list'].filter(o1 => !o1.isCompleted));
         getDoneTasks({ id: userId }).then((r) => {
           setCompletedTasks(r['list'])
           console.log('completed tasks ', r['list']);
-    
+
         })
       }
       else {
@@ -72,7 +98,7 @@ export default function HomePage() {
       }
     })
 
-    
+
   }
 
   const completeATask = function (taskId, isCompleted) {
@@ -116,17 +142,17 @@ export default function HomePage() {
       <NavBarTop></NavBarTop>
       <div className='mt-20'>
         <Heading count={pendingTasks.length}></Heading>
-        <ChipGroup topics={data}></ChipGroup>
+        <ChipGroup categories={categories}></ChipGroup>
 
-        <TaskGroup category='Pending Tasks' taskList={pendingTasks} updateFunction={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
+        <TaskGroup category='Pending Tasks' taskList={pendingTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
 
-        <TaskGroup category='Completed Tasks' taskList={completedTasks} updateFunction={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
+        <TaskGroup category='Completed Tasks' taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
 
         <div className="buttonlow flex justify-center py-20">
-          <NewTaskModal updateFunction={updateTaskData} userId={sessionStorage.getItem("id")} userEmail={sessionStorage.getItem("email")}></NewTaskModal>
+          <NewTaskModal currentCategories={categories} updateFunction={updateTaskData} userId={sessionStorage.getItem("id")} userEmail={sessionStorage.getItem("email")}></NewTaskModal>
         </div>
 
-
+        task - {taskList}
 
         {/* Boiler plate for taskgroup...*/}
 
