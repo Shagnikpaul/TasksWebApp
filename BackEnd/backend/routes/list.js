@@ -399,8 +399,8 @@ router.get("/getCategoryWiseTask/:id", async (req, res) => {
         res.status(200).json({foo, message: "List of tasks category wise"})
     } catch (error) {
         console.log(error);
-        res.status(200).json({ error, message: "unexpected error" });
-
+        res.status(200).json({ error, message: "unexpected error" }); 
+        // hewo
     }
 });
 
