@@ -10,7 +10,7 @@ import { EditIcon } from '../icons/EditIcon';
 import EditTaskModal from './EditTaskModal';
 
 
-function TaskBox({ taskData, completeTask, updateTaskList, category }) {
+function TaskBox({ taskData, completeTask, updateTaskList, allCategories, taskCategory }) {
     const [color, changeColor] = useState("green")
     const [IconVisible, setIconVisible] = useState("invisible")
     const [taskTitle, setTaskTitle] = useState("Loading")
@@ -20,9 +20,9 @@ function TaskBox({ taskData, completeTask, updateTaskList, category }) {
         // console.log('Tasks details - ', 'title', taskData.title, 'body', taskData.body);
         setTaskTitle(taskData.title)
         setTaskDescription(taskData.body)
-        
-        if (taskData.color !== undefined) {
-            changeColor(taskData.color)
+
+        if (taskCategory['category_color'] !== undefined) {
+            changeColor(taskCategory['category_color'])
         }
     }, [])
 
@@ -30,7 +30,7 @@ function TaskBox({ taskData, completeTask, updateTaskList, category }) {
         console.log('Ran Update function for task : ', taskId);
         setTaskDescription(taskDescription)
         setTaskTitle(taskTitle)
-
+        updateTaskList(sessionStorage.getItem('id'), sessionStorage.getItem('email'))
     }
     function onHoverE(taskId) {
         //console.log(`${taskId} is being hovered on`);
@@ -45,8 +45,12 @@ function TaskBox({ taskData, completeTask, updateTaskList, category }) {
     function deleteTaskCall(taskId) {
         console.log("task delete initiated... for task id", taskId);
         deleteTask({ email: sessionStorage.getItem("email") }, { id: taskId }).then((r) => {
-            console.log(`task[${taskId}] successfully deleted with status ${r}`)
+            console.log(`task[${taskId}] deleted with message`, r['message'])
+
             updateTaskList(sessionStorage.getItem("id"), sessionStorage.getItem("email"))
+        }).catch((e) => {
+            console.log('error while deleting the task');
+
         })
     }
 
@@ -80,7 +84,7 @@ function TaskBox({ taskData, completeTask, updateTaskList, category }) {
                     <div className="flex">
 
 
-                        <EditTaskModal updateFunction={updateTask} setIconInvisible={setIconVisible} customStyle={`${IconVisible} bg-red-500/1`} taskData={taskData} />
+                        <EditTaskModal updateFunction={updateTask} setIconInvisible={setIconVisible} customStyle={`${IconVisible} bg-red-500/1`} taskData={taskData} currentCategories={allCategories} taskCategory={taskCategory} />
                         {/* <Button isIconOnly className={`${IconVisible} bg-red-500/1`} onPress={() => {
                                 console.log("Edit for ", taskData._id);
 

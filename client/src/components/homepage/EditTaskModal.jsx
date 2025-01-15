@@ -8,18 +8,24 @@ import {
     useDisclosure,
     Input,
     Tooltip,
-    Textarea
+    Textarea,
+    Dropdown,
+    DropdownTrigger,
+    DropdownMenu,
+    DropdownItem,
 } from "@nextui-org/react";
 import { EditIcon } from "../icons/EditIcon";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { updateTask } from "../../api/calls";
+import { chiptxtColors } from "../../utils/colors";
 
 
-export default function EditTaskModal({ customStyle, taskData, setIconInvisible, updateFunction }) {
+export default function EditTaskModal({ customStyle, taskData, setIconInvisible, updateFunction, currentCategories, taskCategory }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [taskTitle, setTaskTitle] = useState(`${taskData.title}`)
     const [taskDescription, setTaskDescription] = useState(`${taskData.body}`)
-
+    const [selectedKey, setSelectedKey] = useState(new Set([""]));
+    const [chosenCategory, setChosenCategory] = useState({ _id: taskCategory['_id'], category_name: taskCategory['category_name'], category_emoji: taskCategory['category_emoji'] })
     const drawerClose = function () {
         setTaskTitle(taskData.title)
         setTaskDescription(taskData.body)
@@ -32,7 +38,9 @@ export default function EditTaskModal({ customStyle, taskData, setIconInvisible,
     }
 
     const drawerContinue = function () {
-        updateTask({ email: sessionStorage.getItem("email") }, { id: taskData._id, title: taskTitle, body: taskDescription }).then((r) => {
+        console.log("UPDATE !!!");
+
+        updateTask({ email: sessionStorage.getItem("email") }, { id: taskData._id, title: taskTitle, body: taskDescription, category_id: chosenCategory['_id'] }).then((r) => {
             console.log("task was updated with status : ", r);
             updateFunction(taskTitle, taskDescription, taskData._id)
             onOpenChange()
@@ -41,7 +49,10 @@ export default function EditTaskModal({ customStyle, taskData, setIconInvisible,
         })
 
     }
-
+    const selectedValue = useMemo(
+        () => Array.from(selectedKey).join(", ").replace(/_/g, ""),
+        [selectedKey],
+    );
     return (
         <>
             <Tooltip content="Edit task" color='primary' className='font-inter text-sm' closeDelay={100} offset={15} placement='left'>
@@ -54,7 +65,7 @@ export default function EditTaskModal({ customStyle, taskData, setIconInvisible,
                 <DrawerContent>
                     {(onClose) => (
                         <>
-                            <DrawerHeader className="flex flex-col gap-1">Log in</DrawerHeader>
+                            <DrawerHeader className="flex flex-col gap-1">Edit Task</DrawerHeader>
                             <DrawerBody>
                                 <Input
                                     isRequired
@@ -80,7 +91,29 @@ export default function EditTaskModal({ customStyle, taskData, setIconInvisible,
                                     onValueChange={setTaskDescription}
                                 />
 
+                                <Dropdown>
+                                    <DropdownTrigger>
+                                        <Button startContent={<p>{chosenCategory['category_emoji']}</p>} className="capitalize" variant="bordered">
+                                            {chosenCategory['category_name']}
+                                        </Button>
+                                    </DropdownTrigger>
+                                    <DropdownMenu aria-label="Dynamic Actions"
+                                        disallowEmptySelection
+                                        // aria-label="Single selection example"
+                                        selectedKeys={selectedKey}
+                                        selectionMode="single"
+                                        variant="flat"
+                                        onAction={(key) => {
+                                            console.log("Category : ", key);
+                                        }}
+                                        onSelectionChange={setSelectedKey}
+                                    >
+                                        {currentCategories.map(c => <DropdownItem onPress={() => {
+                                            setChosenCategory(c)
+                                        }} className={chiptxtColors[c.category_color]} endContent={<p>{c['category_emoji']}</p>} key={c['_id']}>{c['category_name']}</DropdownItem>)}
 
+                                    </DropdownMenu>
+                                </Dropdown>
                             </DrawerBody>
                             <DrawerFooter>
                                 <Button color="danger" variant="flat" onPress={drawerClose}>

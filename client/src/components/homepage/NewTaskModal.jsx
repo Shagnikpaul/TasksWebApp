@@ -15,12 +15,10 @@ import {
     Dropdown,
     DropdownTrigger,
     DropdownMenu,
-    DropdownSection,
     DropdownItem
 } from "@nextui-org/dropdown";
 import PropTypes from 'prop-types';
 import { addTask } from '../../api/calls';
-import { IconDelete } from '../icons/DeleteIcon';
 import { chiptxtColors } from '../../utils/colors';
 
 

@@ -7,7 +7,7 @@ import NavBarTop from '../components/NavBarTop'
 import data from '../utils/sample_data';
 
 import { useSelector } from "react-redux";
-import { getTasks, getDoneTasks, completeTask, undoTask, getCategories } from '../api/calls';
+import { getTasks, getDoneTasks, completeTask, undoTask, getCategories, getCategoryWiseTasks } from '../api/calls';
 import TaskGroup from '../components/homepage/TaskGroup';
 import NewTaskModal from '../components/homepage/NewTaskModal';
 
@@ -23,35 +23,31 @@ export default function HomePage() {
   const [completedTasks, setCompletedTasks] = useState([])
   const [categories, setCategories] = useState([])
 
-  const [taskList, setTaskList] = useState([])
-
+  const [allTasks, setAllTasks] = useState([])
 
 
   useEffect(() => {
+    console.log('reredering ... ');
     const userId = sessionStorage.getItem("id");
     const userEmail = sessionStorage.getItem("email")
 
-    updateTaskData(userId, userEmail).then((r) => {
-      console.log("Updated Tasks DATA");
 
-    })
 
     getCategories(userId).then((r) => {
 
       if (r['categories'].length !== 0) {
         console.log("categories were updated ... ");
-
         setCategories(r['categories'])
-        
-        categorizeAndSetTaskList(r['categories'])
+        updateAllTasks(userId, r['categories'])
       }
       else {
         console.log("No categories are there");
-
       }
+    })
+    updateTaskData(userId, userEmail).then((r) => {
+      console.log("Updated Tasks DATA");
 
     })
-
 
 
   }, [])
@@ -59,44 +55,56 @@ export default function HomePage() {
 
 
 
-  const categorizeAndSetTaskList = async function (cats) {
 
 
-    cats.map(fu)
-    console.log('tasllist ',taskList);
-    
+
+
+  const updateAllTasks = async function (userId, r) {
+    const tskss = []
+    for (const c of r) {
+      console.log('user id = ', userId, 'cat name', c['category_name']);
+      const tsks = await getCategoryWiseTasks(c['_id'], userId)
+      //console.log('tsks, ', tsks);
+      tskss.push(tsks)
+    }
+    //console.log('total : ', tskss);
+
+    setAllTasks(tskss)
   }
 
-  const fu = function (c) {
-    setTaskList(o => [...o, []])
-  }
 
   const updateTaskData = async function (userId, userEmail) {
     console.log('id', userId, 'email', userEmail);
-    getTasks({ id: userId }, null).then((r) => {
+    updateAllTasks(userId, categories).then((r) => {
+      getTasks({ id: userId }, null).then((r) => {
 
-      //console.log("r is ",r);
+        //console.log("r is ",r);
 
 
-      if (r['message'] === 'tasks') {
-        setUserTasks(r['list'])
-        console.log('user tasks', r['list']);
-        setPendingTasks(
-          r['list'].filter(o1 => !o1.isCompleted)
-        )
-        console.log('pending ', r['list'].filter(o1 => !o1.isCompleted));
-        getDoneTasks({ id: userId }).then((r) => {
-          setCompletedTasks(r['list'])
-          console.log('completed tasks ', r['list']);
+        if (r['message'] === 'tasks') {
+          getDoneTasks({ id: userId }).then((re) => {
+            setCompletedTasks(re['list'])
+            console.log('completed tasks ', re['list']);
 
-        })
-      }
-      else {
-        setUserTasks([])
-        setCompletedTasks([])
-        setPendingTasks([])
-      }
+            setUserTasks(r['list'])
+            console.log('user tasks', r['list']);
+            setPendingTasks(
+              r['list'].filter(o1 => !o1.isCompleted)
+            )
+            console.log('pending ', r['list'].filter(o1 => !o1.isCompleted));
+
+          })
+
+
+        }
+        else {
+          setUserTasks([])
+          setCompletedTasks([])
+          setPendingTasks([])
+        }
+      })
     })
+
 
 
   }
@@ -144,15 +152,31 @@ export default function HomePage() {
         <Heading count={pendingTasks.length}></Heading>
         <ChipGroup categories={categories}></ChipGroup>
 
-        <TaskGroup category='Pending Tasks' taskList={pendingTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
 
-        <TaskGroup category='Completed Tasks' taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
+
+
+
+        {
+          allTasks.map(t =>
+            <TaskGroup key={t['category']['_id']} category={t['category']} taskList={t['tasksList'].filter(o1 => !o1.isCompleted)} updateTaskListFunction={updateTaskData} completeTask={completeATask} allCategories={categories}>
+            </TaskGroup>)
+        }
+
+
+
+
+        <TaskGroup category={{ category_name: 'All Tasks' }} taskList={pendingTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
+
+        <TaskGroup category={{ category_name: 'Completed Tasks' }} taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
+
+
+
+
 
         <div className="buttonlow flex justify-center py-20">
           <NewTaskModal currentCategories={categories} updateFunction={updateTaskData} userId={sessionStorage.getItem("id")} userEmail={sessionStorage.getItem("email")}></NewTaskModal>
         </div>
 
-        task - {taskList}
 
         {/* Boiler plate for taskgroup...*/}
 
@@ -161,7 +185,7 @@ export default function HomePage() {
 
             {(userTasks.length === 0) ? "task list is empty" : userTasks.map(v => (<TaskBox taskData={v} key={v['_id']} ></TaskBox>))}
 
-            
+            jj
           </div>
 
         </div> */}

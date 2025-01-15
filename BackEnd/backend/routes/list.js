@@ -193,7 +193,8 @@ router.delete("/deleteTask/:id", async (req, res) => {
             res.status(200).json({ message: "task not found" })
         }
 
-        const prevCategoryId = prevList.Category[0].toJSON;
+        const prevCategoryId = prevList.Category[0].toJSON();
+        //console.log('prevcategoryid ', prevCategoryId);
 
         if (prevCategoryId)
             await Category.findByIdAndUpdate(prevCategoryId, { $pull: { tasks: req.params.id } })
@@ -380,26 +381,47 @@ router.get("/getTask/:id", async (req, res) => {
 });
 
 
-router.get("/getCategoryWiseTask/:id", async (req, res) => {
+router.get("/getCategoryWiseTask/:user_id/:id", async (req, res) => {
     try {
-        const { user_id } = req.body;
+        const user_id = req.params.user_id;
         const category_id = req.params.id;
 
         const existingUser = await User.findById(user_id);
         if (!existingUser) {
+            console.log(existingUser, 'user id ', user_id, 'category id', category_id, 'red bo', req.body);
+
             res.status(200).json({ message: "user not found" });
+            return;
         }
 
-        const tasks = await Category.findById( category_id ).get('tasks');
-        const foo = []
-        tasks.forEach(async (e) => {
-             foo.push(await List.findById(e));
-        })
+        const category = await Category.findById(category_id);
+        //console.log(category['category_name']);
 
-        res.status(200).json({foo, message: "List of tasks category wise"})
+        if (!category) {
+            res.status(200).json({ message: "no category found" })
+            return;
+        }
+
+        const tasks = category['tasks']
+        const tasksList = []
+        //console.log('tasks is', tasks);
+
+        for (const e of tasks) {
+            const t = await List.findById(e).exec()
+            tasksList.push(t);
+        }
+        // tasks.forEach(async (e) => {
+        //     //console.log('e is', e);
+        //     const t = await List.findById(e).exec()
+        //     console.log('t is ', t);
+        //     foo.push(t);
+        // })
+        //console.log('now foo is', foo);
+
+        res.status(200).json({ category: category, tasksList: tasksList, message: "List of tasks category wise" })
     } catch (error) {
         console.log(error);
-        res.status(200).json({ error, message: "unexpected error" }); 
+        res.status(200).json({ error, message: "unexpected error" });
         // hewo
     }
 });

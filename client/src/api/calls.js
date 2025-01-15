@@ -33,6 +33,7 @@ export async function updateTask(user, task) {
     const payload = {
         email: user.email,
         title: task.title,
+        category_id: task.category_id,
         body: task.body
     }
     try {
@@ -104,10 +105,13 @@ export async function deleteTask(user, task) {
                 return result
             })
             .catch((error) => {
+                console.log('error in delete call !!', error);
+
                 return error;
             })
     }
     catch (error) {
+        console.log('error in delete call !!', error);
         return error;
     }
 }
@@ -163,7 +167,6 @@ export async function getDoneTasks(user, task) {
 }
 
 export async function getTasks(user, task) {
-
     try {
         return await axios.get(`${d_uri}/api/v2/getTasks/${user.id}`)
             .then((response) => {
@@ -201,6 +204,30 @@ export async function getCategories(userId) {
         return error;
     }
 }
+
+
+export async function getCategoryWiseTasks(categoryId, userId) {
+    const payload = {
+        user_id: userId
+    }
+
+
+    try {
+        return await axios.get(`${d_uri}/api/v2/getCategoryWiseTask/${userId}/${categoryId}`)
+            .then((r) => {
+                console.log('hello user id is', userId);
+                return r.data
+            })
+            .catch((e) => {
+                return e
+            })
+    }
+    catch (error) {
+        return error;
+    }
+}
+
+
 // console.log("here")
 // const hello = await getTasks({ id: "6768497caf18629230d56a10" }, null)
 // console.log('trying getTasks : ', hello);

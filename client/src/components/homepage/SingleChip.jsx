@@ -10,7 +10,7 @@ function SingleChip({ data }) {
     
 
     return (
-        <div>
+        <div className='cursor-pointer'>
             <Chip
                 key={data._id}
                 startContent={<p>{data.category_emoji}</p>}
