@@ -1,12 +1,14 @@
 
 import PropTypes from 'prop-types'
 import TaskBox from './TaskBox'
+import { useState } from 'react';
 
 
 function TaskGroup({ taskList, category, completeTask, updateTaskListFunction, allCategories }) {
+    const [isVisible,setVisible] = useState((taskList)?"invisible":"visible");
     return (
         <>
-            <div className="mt-10 task-group flex justify-center ">
+            <div className= {`mt-10 task-group flex justify-center `}>
                 <div className="parent-group">
                     <div className="group-category flex flex-col gap-5">
                         <p className='text-lg  inline-flex'>{category['category_name']}</p>
