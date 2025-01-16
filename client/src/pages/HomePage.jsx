@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { getTasks, getDoneTasks, completeTask, undoTask, getCategories, getCategoryWiseTasks } from '../api/calls';
 import TaskGroup from '../components/homepage/TaskGroup';
 import NewTaskModal from '../components/homepage/NewTaskModal';
+import { Progress } from '@nextui-org/react';
 
 
 // import {Chip} from '../components/homepage/Chip'
@@ -22,11 +23,12 @@ export default function HomePage() {
   const [pendingTasks, setPendingTasks] = useState([])
   const [completedTasks, setCompletedTasks] = useState([])
   const [categories, setCategories] = useState([])
-
+  const [loadingState, setLoadingState] = useState("")
   const [allTasks, setAllTasks] = useState([])
 
 
   useEffect(() => {
+    setLoadingState("")
     console.log('reredering ... ');
     const userId = sessionStorage.getItem("id");
     const userEmail = sessionStorage.getItem("email")
@@ -46,6 +48,7 @@ export default function HomePage() {
 
 
   const updateCategories = function (userId) {
+    setLoadingState("")
     getCategories(userId).then((r) => {
 
       if (r['categories'].length !== 0) {
@@ -61,6 +64,7 @@ export default function HomePage() {
 
 
   const updateAllTasks = async function (userId, r) {
+    setLoadingState("")
     const tskss = []
     for (const c of r) {
       console.log('user id = ', userId, 'cat name', c['category_name']);
@@ -75,6 +79,7 @@ export default function HomePage() {
 
 
   const updateTaskData = async function (userId, userEmail) {
+    setLoadingState("")
     console.log('id', userId, 'email', userEmail);
     updateAllTasks(userId, categories).then((r) => {
       getTasks({ id: userId }, null).then((r) => {
@@ -93,7 +98,7 @@ export default function HomePage() {
               r['list'].filter(o1 => !o1.isCompleted)
             )
             console.log('pending ', r['list'].filter(o1 => !o1.isCompleted));
-
+            setLoadingState("collapse")
           })
 
 
@@ -102,6 +107,7 @@ export default function HomePage() {
           setUserTasks([])
           setCompletedTasks([])
           setPendingTasks([])
+          setLoadingState("collapse")
         }
       })
     })
@@ -153,20 +159,34 @@ export default function HomePage() {
         <Heading count={pendingTasks.length}></Heading>
         <ChipGroup updateCategoriesCallback={updateCategories} categories={categories}></ChipGroup>
 
-
+        <div className={`loading flex flex-col p-5 ${loadingState}`}>
+          <p className='text-center'>Updating Data...</p>
+          <div className='flex flex-row justify-center'>
+            <Progress isIndeterminate aria-label="Updating Data..." className="max-w-md p-2" size="sm" />
+          </div>
+        </div>
 
 
 
         {
-          allTasks.map(t =>
-            <TaskGroup key={t['category']['_id']} category={t['category']} taskList={t['tasksList'].filter(o1 => !o1.isCompleted)} updateTaskListFunction={updateTaskData} completeTask={completeATask} allCategories={categories}>
-            </TaskGroup>)
+          allTasks.map((t) => {
+            const filteredTaskList = t['tasksList'].filter(o1 => !o1.isCompleted)
+            if (filteredTaskList === undefined || filteredTaskList.length === 0) {
+              return ""
+            }
+            else {
+              return <TaskGroup key={t['category']['_id']} category={t['category']} taskList={filteredTaskList} updateTaskListFunction={updateTaskData} completeTask={completeATask} allCategories={categories}>
+              </TaskGroup>
+            }
+
+          }
+          )
         }
 
 
 
 
-        <TaskGroup category={{ category_name: 'All Tasks' }} taskList={pendingTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
+        {/* <TaskGroup category={{ category_name: 'All Tasks' }} taskList={pendingTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup> */}
 
         <TaskGroup category={{ category_name: 'Completed Tasks' }} taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData}></TaskGroup>
 
@@ -177,6 +197,7 @@ export default function HomePage() {
         <div className="buttonlow flex justify-center py-20">
           <NewTaskModal currentCategories={categories} updateFunction={updateTaskData} userId={sessionStorage.getItem("id")} userEmail={sessionStorage.getItem("email")}></NewTaskModal>
         </div>
+
 
 
         {/* Boiler plate for taskgroup...*/}
