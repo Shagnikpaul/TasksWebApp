@@ -207,11 +207,6 @@ export async function getCategories(userId) {
 
 
 export async function getCategoryWiseTasks(categoryId, userId) {
-    const payload = {
-        user_id: userId
-    }
-
-
     try {
         return await axios.get(`${d_uri}/api/v2/getCategoryWiseTask/${userId}/${categoryId}`)
             .then((r) => {
@@ -227,7 +222,31 @@ export async function getCategoryWiseTasks(categoryId, userId) {
     }
 }
 
+export async function addNewCategory(userId, categoryData) {
+    const payload = {
+        category_name: categoryData.category_name,
+        category_emoji: categoryData.category_emoji,
+        category_color: categoryData.category_color,
+        priority: categoryData.priority
+    }
 
+
+    try {
+        return await axios.post(`${d_uri}/api/v2/addCategory/${userId}`, payload).then((r) => {
+            console.log('response is ', r['data']);
+            return r['data']
+        })
+            .catch((e) => {
+                console.log('error : ', e);
+                return e;
+
+            })
+    }
+    catch (e) {
+        console.log("error cause : ", e);
+        return e;
+    }
+}
 // console.log("here")
 // const hello = await getTasks({ id: "6768497caf18629230d56a10" }, null)
 // console.log('trying getTasks : ', hello);

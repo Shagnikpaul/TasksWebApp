@@ -33,6 +33,19 @@ export default function HomePage() {
 
 
 
+    updateCategories(userId)
+    updateTaskData(userId, userEmail).then((r) => {
+      console.log("Updated Tasks DATA");
+    })
+  }, [])
+
+
+
+
+
+
+
+  const updateCategories = function (userId) {
     getCategories(userId).then((r) => {
 
       if (r['categories'].length !== 0) {
@@ -44,19 +57,7 @@ export default function HomePage() {
         console.log("No categories are there");
       }
     })
-    updateTaskData(userId, userEmail).then((r) => {
-      console.log("Updated Tasks DATA");
-
-    })
-
-
-  }, [])
-
-
-
-
-
-
+  }
 
 
   const updateAllTasks = async function (userId, r) {
@@ -150,7 +151,7 @@ export default function HomePage() {
       <NavBarTop></NavBarTop>
       <div className='mt-20'>
         <Heading count={pendingTasks.length}></Heading>
-        <ChipGroup categories={categories}></ChipGroup>
+        <ChipGroup updateCategoriesCallback={updateCategories} categories={categories}></ChipGroup>
 
 
 

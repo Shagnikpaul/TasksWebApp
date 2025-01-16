@@ -3,23 +3,14 @@ import { Chip } from "@nextui-org/react";
 import PropTypes from 'prop-types';
 import SingleChip from "./SingleChip";
 import { PlusIcon } from "../icons/PlusIcon";
+import { AddCategoryModal } from "./AddCategoryModal";
 
-export default function ChipGroup({ categories }) {
+export default function ChipGroup({ categories, updateCategoriesCallback }) {
 
     return (
         <div className="flex gap-2 justify-center mt-5">
             {categories.map(r => <SingleChip key={r['_id']} data={r} />)}
-            <Chip
-                size="lg"
-                //color="success"
-                radius='sm'
-                variant="flat"
-                onClick={(e) => {
-                    console.log("cliiiiii");
-                    
-                }}
-                className="cursor-pointer"
-            ><PlusIcon /></Chip>
+            <AddCategoryModal updateCategoriesCallback={updateCategoriesCallback} existingCategories={categories} />
         </div>
 
     )
@@ -27,5 +18,6 @@ export default function ChipGroup({ categories }) {
 
 
 ChipGroup.propTypes = {
-    categories: PropTypes.array.isRequired
+    categories: PropTypes.array.isRequired,
+    updateCategoriesCallback: PropTypes.func.isRequired
 }
