@@ -3,7 +3,7 @@ const User = require("../models/user");
 const mongoose = require("mongoose");
 const Settings = require("../models/settings");
 
-//Pass username in params
+//Pass userid in params
 
 router.put("/changeUsername/:id", async(req,res) => {
     try{
@@ -40,8 +40,6 @@ router.put("/changeAvatar/:id", async(req,res) => {
         res.status(200).json({error:error,message:"error occured in changing avatar"})
     }
 });
-
-//Signin existing user
 
 router.put("/changeTheme/:id", async(req,res) => {
     try{
