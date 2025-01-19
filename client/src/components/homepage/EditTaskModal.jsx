@@ -13,7 +13,7 @@ import {
     DropdownTrigger,
     DropdownMenu,
     DropdownItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { EditIcon } from "../icons/EditIcon";
 import { useEffect, useState, useMemo } from "react";
 import { updateTask } from "../../api/calls";

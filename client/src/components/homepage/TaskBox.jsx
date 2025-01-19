@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Checkbox } from "@nextui-org/checkbox";
+import { Checkbox } from "@heroui/checkbox";
 import './taskbox.css'
-import { Tooltip, Button, Spacer } from "@nextui-org/react";
+import { Tooltip, Button, Spacer } from "@heroui/react";
 
 import { IconDelete } from './../icons/DeleteIcon'
 

@@ -1,5 +1,5 @@
 
-import { Input, Button } from "@nextui-org/react";
+import { Input, Button } from "@heroui/react";
 import { useEffect, useState } from "react";
 import { EyeFilledIcon, EyeSlashFilledIcon } from "../components/signinpage/passicon";
 import { Link } from "wouter";

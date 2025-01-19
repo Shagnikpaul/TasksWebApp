@@ -9,14 +9,14 @@ import {
     Button,
     useDisclosure,
     Input,
-} from "@nextui-org/react";
-import { Alert } from "@nextui-org/alert";
+} from "@heroui/react";
+import { Alert } from "@heroui/alert";
 import {
     Dropdown,
     DropdownTrigger,
     DropdownMenu,
     DropdownItem
-} from "@nextui-org/dropdown";
+} from "@heroui/dropdown";
 import PropTypes from 'prop-types';
 import { addTask } from '../../api/calls';
 import { chiptxtColors } from '../../utils/colors';

@@ -14,7 +14,7 @@ import {
     Select,
     SelectItem,
     Input,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { colorList } from '../../utils/colors';
 import { useEffect, useState } from 'react';
 import converter from 'number-to-words'

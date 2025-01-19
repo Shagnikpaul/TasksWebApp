@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { getTasks, getDoneTasks, completeTask, undoTask, getCategories, getCategoryWiseTasks } from '../api/calls';
 import TaskGroup from '../components/homepage/TaskGroup';
 import NewTaskModal from '../components/homepage/NewTaskModal';
-import { Progress } from '@nextui-org/react';
+import { Progress } from "@heroui/react";
 
 
 // import {Chip} from '../components/homepage/Chip'
