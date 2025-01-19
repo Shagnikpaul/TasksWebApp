@@ -26,6 +26,12 @@ const listSchema = new mongoose.Schema({
             ref: "Category",
         },
     ],
+    settings_id: {
+        type: mongoose.Types.ObjectId,
+        ref: "Settings",
+        // required : true,
+        unique: true
+    }
 
 });
 
