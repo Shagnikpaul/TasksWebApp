@@ -210,7 +210,7 @@ export async function getCategoryWiseTasks(categoryId, userId) {
     try {
         return await axios.get(`${d_uri}/api/v2/getCategoryWiseTask/${userId}/${categoryId}`)
             .then((r) => {
-                console.log('hello user id is', userId);
+                //console.log('hello user id is', userId);
                 return r.data
             })
             .catch((e) => {

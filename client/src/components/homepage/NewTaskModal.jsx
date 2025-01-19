@@ -20,6 +20,7 @@ import {
 import PropTypes from 'prop-types';
 import { addTask } from '../../api/calls';
 import { chiptxtColors } from '../../utils/colors';
+import { PlusIcon } from '../icons/PlusIcon';
 
 
 export default function NewTaskModal({ updateFunction, userId, userEmail, currentCategories }) {
@@ -54,8 +55,9 @@ export default function NewTaskModal({ updateFunction, userId, userEmail, curren
 
     return (
         <>
-            <Button color="primary" onPress={onOpen} className='font-inter'>
-                <p className='font-semibold font-inter'>Add a Task</p>
+            <Button color="primary" onPress={onOpen} className='font-inter' size='lg' isIconOnly>
+                <PlusIcon ></PlusIcon>
+                {/* <p className='font-semibold font-inter'>Add a Task</p> */}
             </Button>
             <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
                 <ModalContent>
@@ -100,8 +102,8 @@ export default function NewTaskModal({ updateFunction, userId, userEmail, curren
                                         selectionMode="single"
                                         variant="flat"
                                         onAction={(key) => {
-                                            console.log("Category : ",key);
-                                            
+                                            console.log("Category : ", key);
+
 
                                         }}
                                         onSelectionChange={setSelectedKey}
