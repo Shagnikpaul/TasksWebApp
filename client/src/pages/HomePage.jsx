@@ -181,7 +181,7 @@ export default function HomePage() {
 
 
 
-        <div className="mt-10 pending-tasks-pane max-w-fit  min-h-[500px] max-h-3.5 ml-auto mr-auto overflow-y-scroll p-5 rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px]">
+        <div className="mt-10 pending-tasks-pane max-w-fit  min-h-[500px] max-h-3.5 ml-auto mr-auto overflow-y-scroll p-5 rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] bg-olive">
           <div className='-mt-10'>
             {
               allTasks.map((t) => {
@@ -210,7 +210,7 @@ export default function HomePage() {
 
 
         <div className='pb-24'>
-          <div className="mt-10 pending-tasks-pane max-w-fit min-h-[300px] max-h-3.5 ml-auto mr-auto overflow-y-scroll rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] ">
+          <div className="mt-10 pending-tasks-pane max-w-fit min-h-[300px] max-h-3.5 ml-auto mr-auto overflow-y-scroll rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] bg-olive-dark">
             <div className='-mt-5'>
               <TaskGroup category={{ category_name: 'Completed Tasks' }} taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData} allCategories={categories}></TaskGroup>
             </div>

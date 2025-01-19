@@ -28,7 +28,7 @@ function NavBarTop() {
     nav(-1);
   };
   return (
-    <Navbar className="bg-olive" maxWidth="full">
+    <Navbar className="bg-olive/0" maxWidth="full" isBlurred={false} shouldHideOnScroll>
       <NavbarBrand>
         <Logo size={40}></Logo>
       </NavbarBrand>
