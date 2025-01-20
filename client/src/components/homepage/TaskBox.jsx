@@ -7,7 +7,7 @@ import { IconDelete } from './../icons/DeleteIcon'
 
 import { deleteTask, updateTask } from '../../api/calls';
 import { EditIcon } from '../icons/EditIcon';
-import EditTaskModal from './EditTaskModal';
+import EditTaskModal from './EditTaskDrawer';
 
 
 function TaskBox({ taskData, completeTask, updateTaskList, allCategories, taskCategory }) {

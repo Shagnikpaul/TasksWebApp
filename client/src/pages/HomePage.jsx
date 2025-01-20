@@ -45,7 +45,6 @@ export default function HomePage() {
     updateCategories(userId)
     updateTaskData(userId, userEmail).then((r) => {
       console.log("Updated Tasks DATA");
-      setLoadingState(loading.no)
     })
   }, [])
 
@@ -82,7 +81,7 @@ export default function HomePage() {
       tskss.push(tsks)
     }
     //console.log('total : ', tskss);
-
+    setLoadingState(loading.no)
     setAllTasks(tskss)
   }
 
@@ -108,7 +107,7 @@ export default function HomePage() {
               r['list'].filter(o1 => !o1.isCompleted)
             )
             //console.log('pending ', r['list'].filter(o1 => !o1.isCompleted));
-
+            setLoadingState(loading.no)
           })
 
 
@@ -182,7 +181,7 @@ export default function HomePage() {
 
 
         <div className="mt-10 pending-tasks-pane max-w-fit  min-h-[500px] max-h-3.5 ml-auto mr-auto overflow-y-scroll p-5 rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] bg-olive">
-          <div className='-mt-10'>
+          <div className='-mt-10 pb-8'>
             {
               allTasks.map((t) => {
                 const filteredTaskList = t['tasksList'].filter(o1 => !o1.isCompleted)
@@ -211,7 +210,7 @@ export default function HomePage() {
 
         <div className='pb-24'>
           <div className="mt-10 pending-tasks-pane max-w-fit min-h-[300px] max-h-3.5 ml-auto mr-auto overflow-y-scroll rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] bg-olive-dark">
-            <div className='-mt-5'>
+            <div className='-mt-5 pb-8'>
               <TaskGroup category={{ category_name: 'Completed Tasks' }} taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData} allCategories={categories}></TaskGroup>
             </div>
 
