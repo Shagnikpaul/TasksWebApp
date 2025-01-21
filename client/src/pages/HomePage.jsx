@@ -71,6 +71,21 @@ export default function HomePage() {
   }
 
 
+  const updateCategoriesOnly = function (userId) {
+    setLoadingState(loading.yes)
+    getCategories(userId).then((r) => {
+
+      if (r['categories'].length !== 0) {
+        console.log("categories were updated ... ");
+        setCategories(r['categories'])
+      }
+      else {
+        console.log("No categories are there");
+      }
+      setLoadingState(loading.no)
+    })
+  }
+
   const updateAllTasks = async function (userId, r) {
 
     const tskss = []
@@ -107,6 +122,7 @@ export default function HomePage() {
               r['list'].filter(o1 => !o1.isCompleted)
             )
             //console.log('pending ', r['list'].filter(o1 => !o1.isCompleted));
+            updateCategoriesOnly(userId)
             setLoadingState(loading.no)
           })
 
