@@ -1,18 +1,19 @@
 //import React from 'react'
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@heroui/react";
+import { Navbar, NavbarBrand, useDisclosure, NavbarContent, NavbarItem, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar } from "@heroui/react";
 import Logo from '../components/Logo'
 import { useSelector } from "react-redux";
 
 import { useDispatch } from "react-redux";
 import { authActions } from "../store";
 import { replace, useNavigate } from "react-router-dom";
+import SettingsMainPage from "./settingspage/SettingsMainPage";
 
 function NavBarTop() {
 
   const nav = useNavigate();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
-
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   var uname = "Kanchon Sen Gupta"
   if (isLoggedIn) uname = sessionStorage.getItem("u_name");
   // console.log(uname)
@@ -57,16 +58,18 @@ function NavBarTop() {
 
               })
             }
-            else {
-              console.log("Task not yet registered ... ");
+            // else if (key == "settings") {
+            //   console.log("Task not yet registered ... ");
 
-            }
+            // }
           }}>
             <DropdownItem key="profile" className="h-14 gap-2 font-inter">
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">{uname}</p>
             </DropdownItem>
-            <DropdownItem key="settings" className="font-inter">Settings</DropdownItem>
+            <DropdownItem key="settings" className="font-inter" onPress={() => {
+              onOpenChange()
+            }}>Settings</DropdownItem>
 
             <DropdownItem key="logout" color="danger"
               className="font-inter">
@@ -75,6 +78,7 @@ function NavBarTop() {
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>)}
+      <SettingsMainPage onOpen={onOpen} onOpenChange={onOpenChange} isOpen={isOpen} />
     </Navbar>
   );
 }
