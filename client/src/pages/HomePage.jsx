@@ -11,6 +11,7 @@ import { getTasks, getDoneTasks, completeTask, undoTask, getCategories, getCateg
 import TaskGroup from '../components/homepage/TaskGroup';
 import NewTaskModal from '../components/homepage/NewTaskModal';
 import { Progress } from "@heroui/react";
+import { Reorder } from 'framer-motion';
 
 
 // import {Chip} from '../components/homepage/Chip'
@@ -205,8 +206,9 @@ export default function HomePage() {
                   return ""
                 }
                 else {
-                  return <TaskGroup key={t['category']['_id']} category={t['category']} taskList={filteredTaskList} updateTaskListFunction={updateTaskData} completeTask={completeATask} allCategories={categories}>
-                  </TaskGroup>
+                  
+                  return<TaskGroup key={t['category']['_id']} category={t['category']} taskList={filteredTaskList} updateTaskListFunction={updateTaskData} completeTask={completeATask} allCategories={categories}>
+                    </TaskGroup>
                 }
 
               }
