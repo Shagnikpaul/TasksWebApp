@@ -56,7 +56,7 @@ function TaskBox({ taskData, completeTask, updateTaskList, allCategories, taskCa
 
 
     return (
-        <div className='min-w-[900px]' onMouseEnter={() => {
+        <div className='min-w-[900px] mb-5' onMouseEnter={() => {
             onHoverE(taskData._id)
         }} onMouseLeave={() => {
             onHoverL(taskData._id)

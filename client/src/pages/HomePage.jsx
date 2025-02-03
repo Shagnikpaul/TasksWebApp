@@ -12,6 +12,7 @@ import TaskGroup from '../components/homepage/TaskGroup';
 import NewTaskModal from '../components/homepage/NewTaskModal';
 import { Progress } from "@heroui/react";
 import { Reorder } from 'framer-motion';
+import Test from '../components/homepage/Test';
 
 
 // import {Chip} from '../components/homepage/Chip'
@@ -96,7 +97,7 @@ export default function HomePage() {
       //console.log('tsks, ', tsks);
       tskss.push(tsks)
     }
-    //console.log('total : ', tskss);
+    console.log('total : ', tskss);
     setLoadingState(loading.no)
     setAllTasks(tskss)
   }
@@ -196,9 +197,9 @@ export default function HomePage() {
         <ChipGroup updateCategoriesCallback={updateCategories} categories={categories}></ChipGroup>
 
 
-
-        <div className="mt-10 pending-tasks-pane max-w-fit  min-h-[500px] max-h-3.5 ml-auto mr-auto overflow-y-scroll p-5 rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] bg-olive">
-          <div className='-mt-10 pb-8'>
+        {/* min-h-[500px] overflow-y-scroll max-h-3.5 */}
+        <div className="mt-10 pending-tasks-pane max-w-fit min-h-[500px] overflow-y-scroll max-h-3.5 ml-auto mr-auto p-5 rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] bg-olive">
+          <div className=' pb-8'>
             {
               allTasks.map((t) => {
                 const filteredTaskList = t['tasksList'].filter(o1 => !o1.isCompleted)
@@ -206,9 +207,10 @@ export default function HomePage() {
                   return ""
                 }
                 else {
-                  
-                  return<TaskGroup key={t['category']['_id']} category={t['category']} taskList={filteredTaskList} updateTaskListFunction={updateTaskData} completeTask={completeATask} allCategories={categories}>
-                    </TaskGroup>
+
+
+                  return <TaskGroup key={t['category']['_id']} category={t['category']} taskList={filteredTaskList} updateTaskListFunction={updateTaskData} completeTask={completeATask} allCategories={categories}>
+                  </TaskGroup>
                 }
 
               }
@@ -228,8 +230,9 @@ export default function HomePage() {
 
         <div className='pb-24'>
           <div className="mt-10 pending-tasks-pane max-w-fit min-h-[300px] max-h-3.5 ml-auto mr-auto overflow-y-scroll rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] bg-olive-dark">
-            <div className='-mt-5 pb-8'>
-              <TaskGroup category={{ category_name: 'Completed Tasks' }} taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData} allCategories={categories}></TaskGroup>
+            <div className=' pb-8'>
+              {(completedTasks === undefined || completedTasks.length === 0) ? "No Completed Tasks" : <TaskGroup category={{ category_name: 'Completed Tasks' }} taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData} allCategories={categories}></TaskGroup>}
+
             </div>
 
           </div>
@@ -254,7 +257,7 @@ export default function HomePage() {
           </div>
 
         </div> */}
-
+       
 
       </div>
     </>

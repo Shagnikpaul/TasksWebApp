@@ -66,7 +66,6 @@ export const AddCategoryModal = ({ existingCategories, updateCategoriesCallback 
                 word: capitalizeFirstLetter(converter.toWords((i + 1)))
             })
         }
-        console.log('prior array : ', temp);
         setPriorityList(temp)
         setSelectedPriority(new Set([(existingCategories.length + 1)]))
     }, [existingCategories.length])
