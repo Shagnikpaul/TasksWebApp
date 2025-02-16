@@ -252,7 +252,7 @@ export async function addNewCategory(userId, categoryData) {
 export async function getSettings(userId) {
     try {
         return await axios.get(`${d_uri}/api/v3/getSettings/${userId}`).then((r) => {
-            console.log('response is ', r['data']);
+            //console.log('response is ', r['data']);
             return r['data'];
         })
             .catch((e) => {
@@ -265,6 +265,25 @@ export async function getSettings(userId) {
         console.log("Error ", e);
         return e;
 
+    }
+}
+
+
+export async function getImageKitAuth() {
+    try {
+        //console.log('called imgkit auth');
+
+        return await axios.get(`${d_uri}/api/img/auth`).then((r) => {
+            //console.log('img kit auth data',r['data']);
+            
+            return r['data'];
+        })
+            .catch((E) => {
+                return E;
+            })
+    }
+    catch (e) {
+        return e;
     }
 }
 
