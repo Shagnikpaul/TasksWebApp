@@ -247,6 +247,33 @@ export async function addNewCategory(userId, categoryData) {
         return e;
     }
 }
+
+
+export async function getSettings(userId) {
+    try {
+        return await axios.get(`${d_uri}/api/v3/getSettings/${userId}`).then((r) => {
+            console.log('response is ', r['data']);
+            return r['data'];
+        })
+            .catch((e) => {
+                console.log("ERROR !!");
+                return e;
+
+            })
+    }
+    catch (e) {
+        console.log("Error ", e);
+        return e;
+
+    }
+}
+
+
+
+
+
+
+
 // console.log("here")
 // const hello = await getTasks({ id: "6768497caf18629230d56a10" }, null)
 // console.log('trying getTasks : ', hello);
@@ -270,3 +297,6 @@ export async function addNewCategory(userId, categoryData) {
 
 // const hello = await updateTask({ email: "tycon@gmail.com" }, { id: "676849a1af18629230d56a13", title: "28th december 2024", body: "some task i have to do" })
 // console.log('testing updateTask ', hello);
+
+
+getSettings("67852fc70e27816b1730229a")
