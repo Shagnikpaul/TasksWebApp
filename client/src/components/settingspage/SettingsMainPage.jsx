@@ -193,6 +193,8 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
                                                                     isRequired
                                                                     label="Edit Username"
                                                                     placeholder="Enter your username"
+                                                                    isInvalid={(userName.length === 0)}
+                                                                    errorMessage={"User name can't be empty."}
                                                                     value={userName}
                                                                     onValueChange={(value) => {
                                                                         setUserName(value)
@@ -205,7 +207,7 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
                                                                     isDisabled
                                                                     label="Edit Email"
                                                                     placeholder="Enter your email"
-                                                                    description="Editing email not allowed for now."
+                                                                    description="Editing email is not allowed for now."
                                                                     value={userEmail}
                                                                     onValueChange={(value) => {
                                                                         setUserEmail(value)
@@ -222,7 +224,9 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
                                                                 <div className="flex gap-4">
                                                                     <Input type='url' label='Image File URL'
                                                                         value={avatarURL}
-                                                                        description="Paste the URL to image file or use the upload button for local file."
+                                                                        description="Paste image URL or upload a local image file."
+                                                                        isInvalid={avatarURL.length === 0}
+                                                                        errorMessage={"Image URL cannot be kept empty."}
                                                                         onValueChange={(v) => {
                                                                             setavatarURL(v)
 
@@ -238,7 +242,7 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
                                                                             fileName="my-upload"
                                                                             onError={onError}
                                                                             onSuccess={(s) => {
-                                                                                console.log("uploaded status", s);
+                                                                                //console.log("uploaded status", s);
                                                                                 setProgressBarData({
                                                                                     ...progressBarData,
                                                                                     show: false
@@ -251,11 +255,18 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
                                                                             }}
                                                                             className='hidden'
                                                                             ref={inputFile}
+
+                                                                            validateFile={(file) => {
+                                                                                console.log(file);
+                                                                                if (file.size > 100000)
+                                                                                    window.alert('file size exceeds 9mb');
+                                                                                return (file.size < 90000);
+                                                                            }}
                                                                         />
 
                                                                     </IKContext>
 
-                                                                    <div className='flex flex-col justify-center'>
+                                                                    <div className='flex flex-col mt-1'>
                                                                         <Button size='lg' isIconOnly color='primary' startContent={<UploadIcons />} className='' variant='shadow'
                                                                             onPress={() => {
                                                                                 inputFile.current.click();
