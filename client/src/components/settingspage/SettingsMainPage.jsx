@@ -7,33 +7,54 @@ import {
     ModalBody,
     ModalFooter,
     Button,
-    Tabs, Tab, Card, CardBody, Switch,
+    Tabs, Tab, Card, CardBody, Progress,
     Input, Link,
     useDisclosure,
     Avatar,
     CardHeader,
 } from "@heroui/react";
 
-import ImageKit from "imagekit";
-import { IKImage, IKVideo, IKContext, IKUpload } from 'imagekitio-react'
+
+import { IKContext, IKUpload } from 'imagekitio-react'
 
 
 
-import { getImageKitAuth, getSettings } from '../../api/calls';
+import { updateAvatarURL, updateUserName, updateUserTheme } from '../../api/calls';
 import { UploadIcons } from '../icons/UploadIcon';
-function SettingsMainPage({ isOpen, onOpen, onOpenChange }) {
-    //const { isOpen, onOpen, onOpenChange } = useDisclosure();
+import { current } from '@reduxjs/toolkit';
+function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settingsUpdateFunction }) {
     const [userName, setUserName] = useState(sessionStorage.getItem("u_name"));
     const [userEmail, setUserEmail] = useState(sessionStorage.getItem("email"));
+    const [userTheme, setUserTheme] = useState("dark")
     const [avatarURL, setavatarURL] = useState("https://ik.imagekit.io/kanchen/my-upload_EYf3kxEFL");
     const [saveButtonStatus, setSaveButtonStatus] = useState(true);
     const [fallBackData, setFallBackData] = useState({}); // to store previous data for undo function
     const inputFile = useRef(null);
     const authURL = `http://localhost:8000/api/img/auth/`;
+    const [progressBarData, setProgressBarData] = useState({
+        show: false,
+        current: 0,
+        max: 100
+    })
+
+
+
+
     const onError = err => {
         console.log("Error", err);
     };
 
+
+
+    const onUploadProgress = progress => {
+        //console.log("Progress", progress);
+        setProgressBarData({
+            ...progressBarData,
+            current: progress.loaded,
+            max: progress.total,
+            show: true
+        })
+    };
 
     const authenticator = async () => {
         try {
@@ -53,25 +74,72 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange }) {
     };
 
     useEffect(() => {
+        //console.log('update settings data in settings page');
+
+        const fallBack = {
+            user_name: settingsData.user_name,
+            email: sessionStorage.getItem("email"),
+            avatar_link: settingsData.avatar_link,
+            user_theme: settingsData.theme
+        }
+        setFallBackData(fallBack)
+        setUserName(settingsData.user_name)
+        setUserEmail(sessionStorage.getItem("email"))
+        setavatarURL(settingsData.avatar_link)
+        setUserTheme(settingsData.theme)
+    }, [settingsData])
 
 
-        getSettings(sessionStorage.getItem("id")).then((r) => {
-            if (r['settings']) {
-                //console.log(("settings init"));
-                setUserName(r['settings']['user_name'])
-                setUserEmail(sessionStorage.getItem("email"))
-                setavatarURL(r['settings']['avatar_link'])
+    function updateSettingsData(new_username, new_theme, new_avatar) {
+        const userId = sessionStorage.getItem("id");
+        // console.log('new_username is ', new_username);
+        // console.log('new_theme is ', new_theme);
+        // console.log('new_avatar is ', new_avatar);
 
-                const fallBack = {
-                    user_name: r['settings']['user_name'],
-                    email: sessionStorage.getItem("email"),
-                    avatar_link: r['settings']['avatar_link']
+        if (new_username !== fallBackData['user_name']) {
+            updateUserName(userId, new_username).then((r) => {
+                if (r['message'] && r['message'] === 'username updated successfully') {
+                    sessionStorage.setItem('u_name', new_username);
+                    setFallBackData({ ...fallBackData, user_name: new_username });
+                    settingsUpdateFunction({
+                        new_username: new_username,
+                        new_theme: new_theme,
+                        new_avatarlink: new_avatar
+                    })
                 }
-                setFallBackData(fallBack)
-            }
-        })
-    }, [])
+            });
+        }
 
+        if (new_avatar !== fallBackData['avatar_link']) {
+            updateAvatarURL(userId, new_avatar).then((r) => {
+                if (r['message'] && r['message'] === "avatar updated successfully") {
+                    setFallBackData({ ...fallBackData, avatar_link: new_avatar });
+                    settingsUpdateFunction({
+                        new_username: new_username,
+                        new_theme: new_theme,
+                        new_avatarlink: new_avatar
+                    })
+                }
+
+            });
+        }
+
+        if (new_theme != fallBackData['user_theme']) {
+            updateUserTheme(userId, new_theme).then((r) => {
+                if (r['message'] && r['message'] === "theme updated successfully") {
+                    setFallBackData({ ...fallBackData, user_theme: new_theme });
+                    settingsUpdateFunction({
+                        new_username: new_username,
+                        new_theme: new_theme,
+                        new_avatarlink: new_avatar
+                    })
+                }
+            });
+        }
+
+
+
+    }
 
 
     return (
@@ -98,10 +166,10 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange }) {
 
                                                     </CardHeader>
                                                     <CardBody className=''>
-                                                        <div className='flex '>
+                                                        <div className='flex p-5 pl-0'>
 
                                                             <Avatar
-                                                                name="Joe"
+                                                                name={userName}
                                                                 isBordered
 
                                                                 radius='lg'
@@ -128,18 +196,20 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange }) {
                                                                     value={userName}
                                                                     onValueChange={(value) => {
                                                                         setUserName(value)
-                                                                        setSaveButtonStatus(false)
+
                                                                     }}
                                                                     type="text" />
 
                                                                 <Input
                                                                     isRequired
+                                                                    isDisabled
                                                                     label="Edit Email"
                                                                     placeholder="Enter your email"
+                                                                    description="Editing email not allowed for now."
                                                                     value={userEmail}
                                                                     onValueChange={(value) => {
                                                                         setUserEmail(value)
-                                                                        setSaveButtonStatus(false)
+
                                                                     }}
                                                                     type="email"
                                                                 />
@@ -152,9 +222,10 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange }) {
                                                                 <div className="flex gap-4">
                                                                     <Input type='url' label='Image File URL'
                                                                         value={avatarURL}
+                                                                        description="Paste the URL to image file or use the upload button for local file."
                                                                         onValueChange={(v) => {
                                                                             setavatarURL(v)
-                                                                            setSaveButtonStatus(false)
+
                                                                         }}
                                                                     ></Input>
                                                                     <IKContext
@@ -168,24 +239,22 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange }) {
                                                                             onError={onError}
                                                                             onSuccess={(s) => {
                                                                                 console.log("uploaded status", s);
+                                                                                setProgressBarData({
+                                                                                    ...progressBarData,
+                                                                                    show: false
+                                                                                })
                                                                                 setavatarURL(s['url'])
+                                                                            }}
+                                                                            onUploadProgress={onUploadProgress}
+                                                                            onUploadStart={() => {
+                                                                                setProgressBarData({ ...progressBarData, show: true })
                                                                             }}
                                                                             className='hidden'
                                                                             ref={inputFile}
                                                                         />
 
                                                                     </IKContext>
-                                                                    {/* <Input type='file' label='Upload a Picture'
-                                                                        variant='bordered'
-                                                                        accept='.jpg, .jpeg, .png .gif .avif'
-                                                                        className='hidden'
-                                                                        ref={inputFile}
-                                                                        onChange={(e) => {
-                                                                            //console.log(e.target);
-                                                                            setavatarURL(URL.createObjectURL(e.target.files[0]))
-                                                                            setSaveButtonStatus(false)
-                                                                        }}
-                                                                    ></Input> */}
+
                                                                     <div className='flex flex-col justify-center'>
                                                                         <Button size='lg' isIconOnly color='primary' startContent={<UploadIcons />} className='' variant='shadow'
                                                                             onPress={() => {
@@ -194,28 +263,36 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange }) {
                                                                     </div>
 
                                                                 </div>
-
+                                                                <Progress
+                                                                    label="Uploading..."
+                                                                    color="primary"
+                                                                    className={(progressBarData.show) ? "" : "hidden"}
+                                                                    size="md"
+                                                                    showValueLabel
+                                                                    maxValue={progressBarData.max}
+                                                                    value={progressBarData.current}
+                                                                />
                                                                 <div className="flex gap-2 justify-end mt-10">
-                                                                    <Button color="primary" isDisabled={saveButtonStatus}
+                                                                    <Button color="primary" isDisabled={
+                                                                        !((userName !== fallBackData['user_name']) || (avatarURL !== fallBackData['avatar_link']))
+                                                                    }
                                                                         onPress={(e) => {
-                                                                            setSaveButtonStatus(true)
+                                                                            updateSettingsData(userName, userTheme, avatarURL);
                                                                         }}>
                                                                         Save
                                                                     </Button>
-                                                                    <Button color="danger" variant='flat' isDisabled={saveButtonStatus}
+                                                                    <Button color="danger" variant='flat' isDisabled={
+                                                                        !((userName !== fallBackData['user_name']) || (avatarURL !== fallBackData['avatar_link']))
+                                                                    }
                                                                         onPress={(e) => {
                                                                             setUserEmail(sessionStorage.getItem("email"))
                                                                             setUserName(sessionStorage.getItem("u_name"))
                                                                             setavatarURL(fallBackData['avatar_link'])
-                                                                            setSaveButtonStatus(true)
+
                                                                         }}>
                                                                         Reset
                                                                     </Button>
                                                                 </div>
-                                                            </form>
-
-                                                            <form action="">
-
                                                             </form>
                                                         </div>
                                                     </CardBody>
@@ -244,5 +321,8 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange }) {
         </div>
     )
 }
+
+
+
 
 export default SettingsMainPage

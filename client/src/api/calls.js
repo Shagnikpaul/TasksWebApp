@@ -269,13 +269,70 @@ export async function getSettings(userId) {
 }
 
 
+export async function updateUserName(userId, userName) {
+    const payload = { new_username: userName }
+    try {
+        return await axios.put(`${d_uri}/api/v3/changeUsername/${userId}`, payload).then((r) => {
+            //console.log(r['data']);
+
+            return r['data'];
+        })
+            .catch((e) => {
+                return e;
+            });
+    }
+    catch (e) {
+        return e;
+
+    }
+}
+
+export async function updateAvatarURL(userId, new_avatar) {
+    const payload = { new_avatar: new_avatar }
+    try {
+        return await axios.put(`${d_uri}/api/v3/changeAvatar/${userId}`, payload).then((r) => {
+            //console.log(r['data']);
+
+            return r['data'];
+        })
+            .catch((e) => {
+                return e;
+            });
+    }
+    catch (e) {
+        return e;
+
+    }
+}
+
+
+export async function updateUserTheme(userId, new_theme) {
+    const payload = { new_theme: new_theme }
+    try {
+        return await axios.put(`${d_uri}/api/v3/changeTheme/${userId}`, payload).then((r) => {
+            //console.log(r['data']);
+
+            return r['data'];
+        })
+            .catch((e) => {
+                return e;
+            });
+    }
+    catch (e) {
+        return e;
+
+    }
+}
+
+
+
 export async function getImageKitAuth() {
     try {
         //console.log('called imgkit auth');
 
         return await axios.get(`${d_uri}/api/img/auth`).then((r) => {
             //console.log('img kit auth data',r['data']);
-            
+
             return r['data'];
         })
             .catch((E) => {
@@ -318,4 +375,11 @@ export async function getImageKitAuth() {
 // console.log('testing updateTask ', hello);
 
 
-getSettings("67852fc70e27816b1730229a")
+// getSettings("67852fc70e27816b1730229a").then((r) => {
+//     console.log(r);
+
+// })
+
+// updateUserName("67852fc70e27816b1730229a", "kaku")
+
+

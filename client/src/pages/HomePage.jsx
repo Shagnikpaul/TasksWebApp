@@ -4,15 +4,12 @@ import { useEffect, useState } from 'react';
 import ChipGroup from '../components/homepage/ChipGroup'
 import Heading from '../components/homepage/Heading'
 import NavBarTop from '../components/NavBarTop'
-import data from '../utils/sample_data';
-
-import { useSelector } from "react-redux";
-import { getTasks, getDoneTasks, completeTask, undoTask, getCategories, getCategoryWiseTasks } from '../api/calls';
+import { getTasks, getDoneTasks, completeTask, undoTask, getCategories, getCategoryWiseTasks, getSettings } from '../api/calls';
 import TaskGroup from '../components/homepage/TaskGroup';
 import NewTaskModal from '../components/homepage/NewTaskModal';
 import { Progress } from "@heroui/react";
-import { Reorder } from 'framer-motion';
-import Test from '../components/homepage/Test';
+
+
 
 
 // import {Chip} from '../components/homepage/Chip'
@@ -34,25 +31,41 @@ export default function HomePage() {
   const [categories, setCategories] = useState([])
   const [loadingState, setLoadingState] = useState(loading.no)
   const [allTasks, setAllTasks] = useState([])
-
+  const [settingsData, setSettingsData] = useState({})
 
   useEffect(() => {
     setLoadingState(loading.yes)
     console.log('reredering ... ');
     const userId = sessionStorage.getItem("id");
     const userEmail = sessionStorage.getItem("email")
-
-
-
+    initSettings(userId);
     updateCategories(userId)
     updateTaskData(userId, userEmail).then((r) => {
       console.log("Updated Tasks DATA");
     })
+
   }, [])
 
 
 
 
+
+  const initSettings = function (userId) {
+    console.log('settings init');
+    getSettings(userId).then((r) => {
+      if (r['settings']) {
+        setSettingsData(r['settings'])
+      }
+      else {
+        console.log('settings data error');
+      }
+    });
+  }
+
+
+  const updateSettings = function (newSettings) {
+    console.log('update function called')
+  }
 
 
 
@@ -186,12 +199,11 @@ export default function HomePage() {
   return (
     <>
       <div className={`loading flex flex-col ${loadingState}`}>
-
-        <div className='flex flex-col  top-auto bottom-0 justify-center '>
+        <div className='flex flex-col top-auto bottom-0 justify-center '>
           <Progress color='success' isIndeterminate aria-label="Updating Data..." className="" size="sm" />
         </div>
       </div>
-      <NavBarTop></NavBarTop>
+      <NavBarTop ></NavBarTop>
       <div className='mt-20'>
         <Heading count={pendingTasks.length}></Heading>
         <ChipGroup updateCategoriesCallback={updateCategories} categories={categories}></ChipGroup>
@@ -257,7 +269,7 @@ export default function HomePage() {
           </div>
 
         </div> */}
-       
+
 
       </div>
     </>
