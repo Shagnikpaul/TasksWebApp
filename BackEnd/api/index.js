@@ -19,7 +19,7 @@ app.use("/api/img", imageupload);
 // app.get("/" , (req,res) => {
 //     res.send("Hello");
 // })
-
+// update
 // app.listen(8000, () => {
 //     console.log("Server started");
 // });
