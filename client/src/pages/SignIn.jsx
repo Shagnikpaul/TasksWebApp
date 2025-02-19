@@ -8,7 +8,7 @@ import { replace, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store";
 import "../api/calls"
-const d_uri = "http://localhost:8000"
+const d_uri = "https://tasks-web-app-backend.vercel.app"
 // import env from "react-dotenv"
 // const d_uri = env.d_uri
 // console.log("d_uri",d_uri)

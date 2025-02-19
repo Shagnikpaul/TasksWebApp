@@ -5,7 +5,7 @@ import { EyeFilledIcon, EyeSlashFilledIcon } from "../components/signinpage/pass
 import { Link } from "wouter";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-const d_uri = "http://localhost:8000"
+const d_uri = "https://tasks-web-app-backend.vercel.app"
 
 function RegisterPage() {
     const nav= useNavigate();

@@ -2,7 +2,7 @@ import axios from "axios"
 
 // import dotenv from "dotenv"
 // dotenv.config({ path: '../.env' })
-const d_uri = "http://localhost:8000"
+const d_uri = "https://tasks-web-app-backend.vercel.app"
 // const d_uri = process.env.d_uri
 
 console.log('d_uri', d_uri);
