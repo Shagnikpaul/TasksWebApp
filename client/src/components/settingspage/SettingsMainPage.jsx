@@ -31,7 +31,7 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
     const [saveButtonStatus, setSaveButtonStatus] = useState(true);
     const [fallBackData, setFallBackData] = useState({}); // to store previous data for undo function
     const inputFile = useRef(null);
-    const authURL = `http://localhost:8000/api/img/auth/`;
+    const authURL = `https://tasks-web-app-backend.vercel.app/api/img/auth/`;
     const [progressBarData, setProgressBarData] = useState({
         show: false,
         current: 0,
