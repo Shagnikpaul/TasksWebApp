@@ -56,12 +56,12 @@ function TaskBox({ taskData, completeTask, updateTaskList, allCategories, taskCa
 
 
     return (
-        <div className='min-w-[900px] mb-5' onMouseEnter={() => {
+        <div className='mb-5' onMouseEnter={() => {
             onHoverE(taskData._id)
         }} onMouseLeave={() => {
             onHoverL(taskData._id)
         }}>
-            <div className={`flex flex-row justify-between border-2 border-${color}-400 p-3 rounded-lg solid-shadow`}>
+            <div className={`flex flex-row justify-between border-2 border-${color}-400 p-2 lg:p-3 rounded-lg solid-shadow`}>
                 <Checkbox isSelected={taskData.isCompleted} size="md" radius='full' color='primary' onChange={() => {
                     console.log(`Task ${taskData._id} was clicked !!`);
                     if (completeTask !== undefined && !taskData.isCompleted) {
@@ -74,8 +74,8 @@ function TaskBox({ taskData, completeTask, updateTaskList, allCategories, taskCa
                     }
                 }}>
                     <div className="txt-grp px-2">
-                        <p className='text-lg font-semibold'>{taskTitle} - {taskData.Category}</p>
-                        <p className="description-body text-md opacity-65   ">{taskDescription}</p>
+                        <p className='text-sm md:text-md lg:text-lg font-semibold'>{taskTitle}</p>
+                        <p className="description-body text-sm lg:text-md opacity-65">{taskDescription}</p>
                     </div>
 
                 </Checkbox>

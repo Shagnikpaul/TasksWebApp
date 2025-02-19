@@ -14,13 +14,14 @@ function TaskGroup({ taskList, category, completeTask, updateTaskListFunction, a
     }, [taskList])
     return (
         <>
-            <div className='p-4'>
+            <div className='p-1 lg:p-4'>
                 <Reorder.Group
                     axis="y"
                     onReorder={setTasks}
                     values={tasks}
+                    className='w-full'
                 >
-                    <p className='mb-5'>
+                    <p className='mb-3 lg:mb-5 text-sm lg:text-lg'>
                         {category['category_name']}
                     </p>
                     {tasks.map((item) => (

@@ -156,28 +156,29 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
                                     <div className="flex w-full flex-col justify-center ">
 
                                         <Tabs aria-label="Options"
-                                            isVertical={true}
+                                            className='flex-wrap'
+                                            
 
                                             size='lg'>
                                             <Tab key="account" title="Account Settings" className='w-full'>
-                                                <Card className='p-7'>
+                                                <Card className='p-2 lg:p-7'>
                                                     <CardHeader className='block'>
                                                         <h1 className='text-2xl font-semibold'>Account Settings</h1>
 
                                                     </CardHeader>
                                                     <CardBody className=''>
-                                                        <div className='flex p-5 pl-0'>
+                                                        <div className='flex p-5 pl-0 flex-wrap'>
 
                                                             <Avatar
                                                                 name={userName}
                                                                 isBordered
 
                                                                 radius='lg'
-                                                                className="transition-transform w-20 h-20 text-large"
+                                                                className="transition-transform w-20 h-20 text-large mb-5 mr-5"
                                                                 src={avatarURL}
                                                             />
 
-                                                            <div className='ml-7 flex flex-col justify-center '>
+                                                            <div className='flex flex-col justify-center '>
                                                                 <p className='text-2xl font-bold'>
                                                                     {userName}
                                                                 </p>

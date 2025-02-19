@@ -204,13 +204,13 @@ export default function HomePage() {
         </div>
       </div>
       <NavBarTop ></NavBarTop>
-      <div className='mt-20'>
+      <div className='mt-10 lg:mt-20'>
         <Heading count={pendingTasks.length}></Heading>
         <ChipGroup updateCategoriesCallback={updateCategories} categories={categories}></ChipGroup>
 
 
         {/* min-h-[500px] overflow-y-scroll max-h-3.5 */}
-        <div className="mt-10 pending-tasks-pane max-w-fit min-h-[500px] overflow-y-scroll max-h-3.5 ml-auto mr-auto p-5 rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] bg-olive">
+        <div className="lg:mt-10  pending-tasks-pane  lg:w-3/6 md:w-3/5 h-[500px] overflow-y-scroll md:ml-auto md:mr-auto lg:ml-auto lg:mr-auto ml-5 mr-5 p-3 md:p-4 lg:p-5 rounded-xl border-zinc-700 border-2 shadow-lg  bg-olive">
           <div className=' pb-8'>
             {
               allTasks.map((t) => {
@@ -241,7 +241,7 @@ export default function HomePage() {
 
 
         <div className='pb-24'>
-          <div className="mt-10 pending-tasks-pane max-w-fit min-h-[300px] max-h-3.5 ml-auto mr-auto overflow-y-scroll rounded-xl border-zinc-700 border-2 shadow-lg min-w-[960px] bg-olive-dark">
+          <div className="lg:mt-10 mt-8 pending-tasks-pane  lg:w-3/6 md:w-3/5 h-[500px] overflow-y-scroll md:ml-auto md:mr-auto lg:ml-auto lg:mr-auto ml-5 mr-5 p-3 md:p-4 lg:p-5 rounded-xl border-zinc-700 border-2 shadow-lg  bg-olive">
             <div className=' pb-8'>
               {(completedTasks === undefined || completedTasks.length === 0) ? "No Completed Tasks" : <TaskGroup category={{ category_name: 'Completed Tasks' }} taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData} allCategories={categories}></TaskGroup>}
 
