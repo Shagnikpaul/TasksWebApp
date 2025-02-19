@@ -258,12 +258,12 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
                                                                             className='hidden'
                                                                             ref={inputFile}
 
-                                                                            validateFile={(file) => {
-                                                                                console.log(file);
-                                                                                if (file.size > 100000)
-                                                                                    window.alert('file size exceeds 9mb');
-                                                                                return (file.size < 90000);
-                                                                            }}
+                                                                        // validateFile={(file) => {
+                                                                        //     console.log(file);
+                                                                        //     if (file.size > 100000)
+                                                                        //         window.alert('file size exceeds 9mb');
+                                                                        //     return (file.size < 90000);
+                                                                        // }}
                                                                         />
 
                                                                     </IKContext>
