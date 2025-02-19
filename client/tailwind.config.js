@@ -16,7 +16,7 @@ export default {
   theme: {
     colors: {
       'olive': {
-        light: '#272B27',
+        light: '#E3FFDE',
         DEFAULT: '#272B27',
         dark: '#272B27',
         text: '#E3FFDE'

@@ -210,7 +210,7 @@ export default function HomePage() {
 
 
         {/* min-h-[500px] overflow-y-scroll max-h-3.5 */}
-        <div className="lg:mt-10  pending-tasks-pane  lg:w-3/6 md:w-3/5 h-[500px] overflow-y-scroll md:ml-auto md:mr-auto lg:ml-auto lg:mr-auto ml-5 mr-5 p-3 md:p-4 lg:p-5 rounded-xl border-zinc-700 border-2 shadow-lg  bg-olive">
+        <div className="lg:mt-10  pending-tasks-pane  lg:w-3/6 md:w-3/5 h-[500px] overflow-y-scroll md:ml-auto md:mr-auto lg:ml-auto lg:mr-auto ml-5 mr-5 p-3 md:p-4 lg:p-5 rounded-xl border-zinc-700 border-2 shadow-lg  dark:bg-olive bg-green-200/20">
           <div className=' pb-8'>
             {
               allTasks.map((t) => {
@@ -241,7 +241,7 @@ export default function HomePage() {
 
 
         <div className='pb-24'>
-          <div className="lg:mt-10 mt-8 pending-tasks-pane  lg:w-3/6 md:w-3/5 h-[500px] overflow-y-scroll md:ml-auto md:mr-auto lg:ml-auto lg:mr-auto ml-5 mr-5 p-3 md:p-4 lg:p-5 rounded-xl border-zinc-700 border-2 shadow-lg  bg-olive">
+          <div className="lg:mt-10 mt-8 pending-tasks-pane  lg:w-3/6 md:w-3/5 h-[500px] overflow-y-scroll md:ml-auto md:mr-auto lg:ml-auto lg:mr-auto ml-5 mr-5 p-3 md:p-4 lg:p-5 rounded-xl border-zinc-700 border-2 shadow-lg  dark:bg-olive light:bg-green-200">
             <div className=' pb-8'>
               {(completedTasks === undefined || completedTasks.length === 0) ? "No Completed Tasks" : <TaskGroup category={{ category_name: 'Completed Tasks' }} taskList={completedTasks} completeTask={completeATask} updateTaskListFunction={updateTaskData} allCategories={categories}></TaskGroup>}
 

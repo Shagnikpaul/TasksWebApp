@@ -6,12 +6,14 @@ import { Tooltip, Button, Spacer } from "@heroui/react";
 import { IconDelete } from './../icons/DeleteIcon'
 
 import { deleteTask, updateTask } from '../../api/calls';
-import { EditIcon } from '../icons/EditIcon';
+
 import EditTaskModal from './EditTaskDrawer';
+import { border_colors } from '../../utils/colors';
+
 
 
 function TaskBox({ taskData, completeTask, updateTaskList, allCategories, taskCategory }) {
-    const [color, changeColor] = useState("green")
+    const [color, changeColor] = useState("blue")
     const [IconVisible, setIconVisible] = useState("invisible")
     const [taskTitle, setTaskTitle] = useState("Loading")
     const [taskDescription, setTaskDescription] = useState("Loading")
@@ -22,9 +24,11 @@ function TaskBox({ taskData, completeTask, updateTaskList, allCategories, taskCa
         setTaskDescription(taskData.body)
 
         if (taskCategory['category_color'] !== undefined) {
+
+
             changeColor(taskCategory['category_color'])
         }
-    }, [])
+    }, [taskCategory])
 
     const updateTask = function (taskTitle, taskDescription, taskId) {
         console.log('Ran Update function for task : ', taskId);
@@ -61,7 +65,7 @@ function TaskBox({ taskData, completeTask, updateTaskList, allCategories, taskCa
         }} onMouseLeave={() => {
             onHoverL(taskData._id)
         }}>
-            <div className={`flex flex-row justify-between border-2 border-${color}-400 p-2 lg:p-3 rounded-lg solid-shadow`}>
+            <div className={`flex flex-row justify-between border-2  ${border_colors[taskCategory['category_color']]} p-2 lg:p-3 rounded-lg solid-shadow-${sessionStorage.getItem("theme")}`}>
                 <Checkbox isSelected={taskData.isCompleted} size="md" radius='full' color='primary' onChange={() => {
                     console.log(`Task ${taskData._id} was clicked !!`);
                     if (completeTask !== undefined && !taskData.isCompleted) {

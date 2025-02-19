@@ -3,9 +3,25 @@
 @tailwind utilities;
 
 
-#root {
+/* #root {
+    background-color: #272B27;
+    opacity: 1;
+    background-image: linear-gradient(#2c302e 1.4000000000000001px, transparent 1.4000000000000001px), linear-gradient(to right, #2c302e 1.4000000000000001px, #272B27 1.4000000000000001px);
+    background-size: 28px 28px;
+} */
+
+.dark-bg {
     background-color: #272B27;
     opacity: 1;
     background-image: linear-gradient(#2c302e 1.4000000000000001px, transparent 1.4000000000000001px), linear-gradient(to right, #2c302e 1.4000000000000001px, #272B27 1.4000000000000001px);
     background-size: 28px 28px;
 }
+
+.light-bg {
+    background-color: #ecfdea;
+    opacity: 1;
+    background-image: linear-gradient(#dcf6e6 0.9px, transparent 0.9px), linear-gradient(to right, #dcf6e6 0.9px, #ecfdea 0.9px);
+    background-size: 28px 28px;
+}
+
+

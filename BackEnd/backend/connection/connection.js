@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const conn = async () => {
     try {
         dotenv.config({ path: '../.env' })
-        console.log("mongo connection string :", process.env.mongo);
+        //console.log("mongo connection string :", process.env.mongo);
         await mongoose.connect(process.env.mongo).then(() => {
             
             console.log('Mongo Connection successful');

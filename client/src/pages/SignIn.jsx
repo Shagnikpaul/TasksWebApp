@@ -52,7 +52,7 @@ function SignIn() {
             sessionStorage.setItem("id", response.data.others._id);
             sessionStorage.setItem("email", response.data.others.email);
             sessionStorage.setItem("u_name", response.data.others.username);
-
+            sessionStorage.setItem("theme", "dark");
             dispatch(authActions.login());
             nav("/home");
         }).catch((r) => {
@@ -106,7 +106,7 @@ function SignIn() {
                             {/* <Link href='/home'>
                             <Button className="bg-green-400" onClick={signInClick}>Sign In</Button>
                         </Link> */}
-                            <Button className="bg-green-400" onClick={signInClick}>Sign In</Button>
+                            <Button className="bg-green-400" onPress={signInClick}>Sign In</Button>
 
                             {/* <Link href='/register'>
                             <Button color="secondary" onClick={registerAction}>Register</Button>

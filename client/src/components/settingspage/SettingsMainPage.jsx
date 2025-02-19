@@ -22,6 +22,7 @@ import { IKContext, IKUpload } from 'imagekitio-react'
 import { updateAvatarURL, updateUserName, updateUserTheme } from '../../api/calls';
 import { UploadIcons } from '../icons/UploadIcon';
 import { current } from '@reduxjs/toolkit';
+import ThemeSettingsPage from './ThemeSettingsPage';
 function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settingsUpdateFunction }) {
     const [userName, setUserName] = useState(sessionStorage.getItem("u_name"));
     const [userEmail, setUserEmail] = useState(sessionStorage.getItem("email"));
@@ -157,7 +158,7 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
 
                                         <Tabs aria-label="Options"
                                             className='flex-wrap'
-                                            
+
 
                                             size='lg'>
                                             <Tab key="account" title="Account Settings" className='w-full'>
@@ -315,6 +316,9 @@ function SettingsMainPage({ isOpen, onOpen, onOpenChange, settingsData, settings
                                                     <CardHeader>
                                                         <h1 className='text-2xl font-semibold'>Theme Settings</h1>
                                                     </CardHeader>
+                                                    <CardBody>
+                                                        <ThemeSettingsPage />
+                                                    </CardBody>
                                                 </Card>
                                             </Tab>
                                         </Tabs>

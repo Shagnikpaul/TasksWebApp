@@ -1,8 +1,22 @@
 :root {
-    --color-primary: #bf92f8c5;
+    --color-primary: #000000c5;
 }
 
 
-.solid-shadow {
+.solid-shadow-light {
     box-shadow: 6px 6px var(--color-primary);
 }
+
+
+
+
+.solid-shadow-dark {
+    box-shadow: 6px 6px #17471fc5;
+}
+
+
+
+
+
+
+
