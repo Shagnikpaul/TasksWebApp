@@ -20,6 +20,17 @@ app.use("/api/img", imageupload);
 //     res.send("Hello");
 // })
 
-app.listen(8000, () => {
-    console.log("Server started");
-});
+// app.listen(8000, () => {
+//     console.log("Server started");
+// });
+
+
+if (process.env.NODE_ENV !== 'production') {
+    const PORT = process.env.PORT || 8000;
+    app.listen(PORT, () => {
+        console.log(`Server running locally on port ${PORT}`);
+    });
+}
+
+
+module.exports = app;
